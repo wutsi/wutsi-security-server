@@ -1,0 +1,38 @@
+openapi: "3.0.0"
+info:
+  title: "Wutsi Security Server"
+  description: |
+    Wutsi Security Server. It provides the following features:
+    - [JWT](https://jwt.io) authentication
+    - Application registration
+  version: "1.0.0"
+
+servers:
+  - url: https://wutsi-auth-server-test.herokuapp.com
+    description: Sandbox
+  - url: https://wutsi-auth-server-prod.herokuapp.com
+    description: Production
+
+paths:
+  /v1/public-key:
+    get:
+      operationId: "public-key"
+      description: |
+        Return the server's public key. This key can be used for decrypting message for verifying signatures
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyResponse'
+      tags:
+        - Security
+
+
+components:
+  schemas:
+    PublicKeyResponse:
+      type: object
+      properties:
+        value:
+          type: string
