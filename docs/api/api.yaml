@@ -3,6 +3,7 @@ info:
   title: "Wutsi Security Server"
   description: |
     Wutsi Security Server. It provides the following features:
+
     - [JWT](https://jwt.io) authentication
     - Application registration
   version: "1.0.0"
@@ -14,25 +15,60 @@ servers:
     description: Production
 
 paths:
-  /v1/public-key:
+  /v1/keys:
     get:
-      operationId: "public-key"
+      operationId: "get-key"
       description: |
-        Return the server's public key. This key can be used for decrypting message for verifying signatures
+        Return the server's key.
+        This key can be used either for decrypting messages or verifying signatures
       responses:
         200:
+          description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PublicKeyResponse'
+                $ref: '#/components/schemas/GetKeyResponse'
+      tags:
+        - Security
+
+    post:
+      operationId: "create-key"
+      description: |
+        Create the server's key.
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateKeyResponse'
       tags:
         - Security
 
 
 components:
   schemas:
-    PublicKeyResponse:
+    CreateKeyResponse:
       type: object
       properties:
-        value:
+        id:
+          type: integer
+          format: int64
+          description: ID of the key created
+
+    GetKeyResponse:
+      type: object
+      properties:
+        key:
+          type: object
+          $ref: "#/components/schemas/Key"
+
+    Key:
+      type: object
+      properties:
+        algorithm:
           type: string
+          description: Name of the security algorithm
+        content:
+          type: string
+          description: Content of the key, based-64 encoded

@@ -1,9 +1,9 @@
 package com.wutsi.platform.security.endpoint
 
-import com.wutsi.platform.security.`delegate`.PublicKeyDelegate
-import com.wutsi.platform.security.dto.PublicKeyResponse
+import com.wutsi.platform.security.`delegate`.CreateKeyDelegate
+import com.wutsi.platform.security.dto.CreateKeyResponse
 import org.springframework.web.bind.`annotation`.CrossOrigin
-import org.springframework.web.bind.`annotation`.GetMapping
+import org.springframework.web.bind.`annotation`.PostMapping
 import org.springframework.web.bind.`annotation`.RestController
 
 @RestController
@@ -19,9 +19,9 @@ import org.springframework.web.bind.`annotation`.RestController
         org.springframework.web.bind.annotation.RequestMethod.PUT
     ]
 )
-public class PublicKeyController(
-    private val `delegate`: PublicKeyDelegate
+public class CreateKeyController(
+    private val `delegate`: CreateKeyDelegate
 ) {
-    @GetMapping("/v1/public-key")
-    public fun invoke(): PublicKeyResponse = delegate.invoke()
+    @PostMapping("/v1/keys")
+    public fun invoke(): CreateKeyResponse = delegate.invoke()
 }
