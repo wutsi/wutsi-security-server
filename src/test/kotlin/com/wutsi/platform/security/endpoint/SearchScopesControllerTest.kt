@@ -29,15 +29,17 @@ public class SearchScopesControllerTest {
         val response = rest.getForEntity(url, SearchScopeResponse::class.java)
         assertEquals(200, response.statusCodeValue)
 
-        assertEquals(3, response.body.scopes.size)
-        assertScopeEquals("payment-read", "Read payment information", 99, response.body.scopes[0])
-        assertScopeEquals("user-read-basic", "Read user basic information", 99, response.body.scopes[1])
-        assertScopeEquals("user-read-email", "Read user email", 0, response.body.scopes[2])
+        assertEquals(4, response.body.scopes.size)
+        assertScopeEquals("payment-read", "Read payment information", 99, true, response.body.scopes[0])
+        assertScopeEquals("user-read", "Read user information", 99, false, response.body.scopes[1])
+        assertScopeEquals("user-read-basic", "Read user basic information", 99, true, response.body.scopes[2])
+        assertScopeEquals("user-read-email", "Read user email", 0, true, response.body.scopes[3])
     }
 
-    private fun assertScopeEquals(name: String, description: String, securityLevel: Int, scope: Scope) {
+    private fun assertScopeEquals(name: String, description: String, securityLevel: Int, active: Boolean, scope: Scope) {
         assertEquals(name, scope.name)
         assertEquals(description, scope.description)
         assertEquals(securityLevel, scope.securityLevel)
+        assertEquals(active, scope.active)
     }
 }

@@ -9,9 +9,9 @@ info:
   version: "1.0.0"
 
 servers:
-  - url: https://wutsi-server-server-test.herokuapp.com
+  - url: https://wutsi-security-server-test.herokuapp.com
     description: Sandbox
-  - url: https://wutsi-server-server-prod.herokuapp.com
+  - url: https://wutsi-security-server-prod.herokuapp.com
     description: Production
 
 paths:
@@ -47,6 +47,7 @@ paths:
       tags:
         - Security
 
+
   /v1/scopes:
     get:
       operationId: "search-scopes"
@@ -61,6 +62,51 @@ paths:
                 $ref: '#/components/schemas/SearchScopeResponse'
       tags:
         - Security
+
+
+  /v1/applications:
+    post:
+      operationId: "create-application"
+      description: |
+        Create a new application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApplicationRequest'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateApplicationResponse'
+      tags:
+        - Security
+
+#  /v1/applications/{id}:
+#    get:
+#      operationId: "get-application"
+#      description: |
+#        Find an application
+#      parameters:
+#        - in: path
+#          name: id
+#          description: ID of the application
+#          required: true
+#          schema:
+#            type: integer
+#            format: int64
+#      responses:
+#        200:
+#          description: Success
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/GetApplicationResponse'
+#      tags:
+#        - Security
 
 components:
   schemas:
@@ -97,6 +143,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Scope"
+
     Scope:
       type: object
       properties:
@@ -114,3 +161,85 @@ components:
         securityLevel:
           type: integer
           description: Security Level required to get this scope
+        active:
+          type: boolean
+          description: Is the scope active or not?
+
+    CreateApplicationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the application
+        title:
+          type: string
+          description: Human friendly title of the application
+        description:
+          type: string
+          description: Description of the application
+          nullable: true
+        securityLevel:
+          type: integer
+          description: Security Level of the application
+        iconUrl:
+          type: string
+          description: URL of the application icon
+          nullable: true
+        configUrl:
+          type: string
+          description: URL of the application configuration panel
+          nullable: true
+        homeUrl:
+          type: string
+          description: URL of the application home page
+          nullable: true
+        scopeNames:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - title
+
+    CreateApplicationResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID of the application created
+        api-key:
+          type: string
+          format: uuid
+          description: API-Key of the application created
+
+#    GetApplicationResponse:
+#      type: object
+#      properties:
+#        application:
+#          $ref: "#/components/schemas/Application"
+#
+#    Application:
+#      type: object
+#      properties:
+#        id:
+#          type: integer
+#          format: int64
+#          description: ID of the application
+#        name:
+#          type: string
+#          description: Name of the application
+#        description:
+#          type: string
+#          description: Description of the application
+#          nullable: true
+#        securityLevel:
+#          type: integer
+#          description: Security Level of the application
+#        active:
+#          type: boolean
+#          description: Is the application active or not?
+#        scopes:
+#          type: array
+#          items:
+#            $ref: "#/components/schemas/Scope"

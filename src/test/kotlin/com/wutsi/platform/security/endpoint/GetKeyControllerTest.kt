@@ -3,6 +3,7 @@ package com.wutsi.platform.security.endpoint
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.core.error.ErrorResponse
 import com.wutsi.platform.security.dto.GetKeyResponse
+import com.wutsi.platform.security.util.ErrorURN
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -46,6 +47,6 @@ public class GetKeyControllerTest {
         assertEquals(404, ex.rawStatusCode)
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
-        assertEquals("urn:error:wutsi:security:key-not-found", response.error.code)
+        assertEquals(ErrorURN.KEY_NOT_FOUND.urn, response.error.code)
     }
 }

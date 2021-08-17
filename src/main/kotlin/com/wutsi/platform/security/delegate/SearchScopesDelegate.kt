@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service
 @Service
 public class SearchScopesDelegate(private val dao: ScopeRepository) {
     public fun invoke(): SearchScopeResponse {
-        val scopes = dao.findByActive(true)
-
+        val scopes = dao.findAll()
         return SearchScopeResponse(
             scopes = scopes.map {
                 Scope(
                     id = it.id ?: -1,
-                    name = it.name.toLowerCase(),
+                    name = it.name,
                     description = it.description,
-                    securityLevel = it.securityLevel
+                    securityLevel = it.securityLevel,
+                    active = it.active
                 )
             }.sortedBy { it.name }
         )
