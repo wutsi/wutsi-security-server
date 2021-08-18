@@ -12,7 +12,7 @@ import java.util.Date
 class JWTService {
     companion object {
         const val ISSUER = "Wutsi"
-        const val APP_TOKEN_TTL: Long = 60 * 84600000   // 60 days
+        const val APP_TOKEN_TTL: Long = 60 * 84600000 // 60 days
     }
 
     fun createToken(app: ApplicationEntity, keyProvider: RSAKeyProvider): String {
