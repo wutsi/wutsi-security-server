@@ -33,7 +33,6 @@ public class CreateApplicationDelegate(
                     title = request.title,
                     description = request.description,
                     securityLevel = request.securityLevel,
-                    iconUrl = request.iconUrl,
                     homeUrl = request.homeUrl,
                     configUrl = request.configUrl,
                     scopes = toScopes(request),

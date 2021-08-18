@@ -25,7 +25,6 @@ data class ApplicationEntity(
     val active: Boolean = true,
     val configUrl: String? = null,
     val homeUrl: String? = null,
-    val iconUrl: String? = null,
     val created: OffsetDateTime = OffsetDateTime.now(),
     val updated: OffsetDateTime = OffsetDateTime.now(),
 

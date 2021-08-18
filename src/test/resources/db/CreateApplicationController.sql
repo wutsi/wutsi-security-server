@@ -6,7 +6,7 @@ INSERT INTO T_SCOPE(name, description, security_level, active)
         ('payment-read', 'Read payment information', 99, true)
     ;
 
-INSERT INTO T_APPLICATION(name, api_key, title, active)
+INSERT INTO T_APPLICATION(name, api_key, title, active, config_url, home_url, security_level, description)
     VALUES
-        ('com.wutsi.application.test', gen_random_uuid(), 'Test', true)
+        ('com.wutsi.application.test', gen_random_uuid(), 'Test', true, 'https://test.herokuapp.com/config', 'https://test.herokuapp.com', 3, 'description')
 ;

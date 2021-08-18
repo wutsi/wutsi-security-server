@@ -19,7 +19,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/clean.sql", "/db/ApplicationController.sql"])
+@Sql(value = ["/db/clean.sql", "/db/CreateApplicationController.sql"])
 public class CreateApplicationControllerTest {
     @LocalServerPort
     public val port: Int = 0
@@ -41,7 +41,6 @@ public class CreateApplicationControllerTest {
             name = "test-app",
             title = "test-app",
             description = "Sample application",
-            iconUrl = "https://img.com/icon.png",
             homeUrl = "https://test-app.herokuapp.com/home",
             configUrl = "https://test-app.herokuapp.com/config",
             securityLevel = 99,
@@ -61,7 +60,6 @@ public class CreateApplicationControllerTest {
         assertEquals(request.description, app.description)
         assertEquals(request.configUrl, app.configUrl)
         assertEquals(request.homeUrl, app.homeUrl)
-        assertEquals(request.iconUrl, app.iconUrl)
         assertEquals(true, app.active)
         assertEquals(request.securityLevel, app.securityLevel)
         assertNotNull(app.created)
@@ -74,7 +72,6 @@ public class CreateApplicationControllerTest {
             name = "test-app-invalid-scope",
             title = "test-app",
             description = "Sample application",
-            iconUrl = "https://img.com/icon.png",
             homeUrl = "https://test-app.herokuapp.com/home",
             configUrl = "https://test-app.herokuapp.com/config",
             securityLevel = 99,
@@ -99,7 +96,6 @@ public class CreateApplicationControllerTest {
             name = "com.wutsi.application.test",
             title = "test-app",
             description = "Sample application",
-            iconUrl = "https://img.com/icon.png",
             homeUrl = "https://test-app.herokuapp.com/home",
             configUrl = "https://test-app.herokuapp.com/config",
             securityLevel = 99
