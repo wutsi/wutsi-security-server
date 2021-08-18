@@ -108,6 +108,27 @@ paths:
       tags:
         - Security
 
+  /v1/login:
+    post:
+      operationId: "login"
+      description: |
+        Authenticates an application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+      tags:
+        - Authentication
+
 components:
   schemas:
     CreateKeyResponse:
@@ -134,7 +155,6 @@ components:
         content:
           type: string
           description: Content of the key, based-64 encoded
-
 
     SearchScopeResponse:
       type: object
@@ -230,7 +250,6 @@ components:
         title:
           type: string
           description: Human friendly title of the application (30 character or less)
-          maxLength: 30
         description:
           type: string
           description: Description of the application
@@ -261,3 +280,28 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Scope"
+
+    LoginRequest:
+      type: object
+      properties:
+        apiKey:
+          type: string
+          description: Application API Key
+      required:
+        - apiKey
+
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: Access token
+        created:
+          type: string
+          format: date-time
+          description: Creation date/time
+        expires:
+          type: string
+          format: date-time
+          description: Expiry date/time
+

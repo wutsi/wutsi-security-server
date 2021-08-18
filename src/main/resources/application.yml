@@ -57,9 +57,6 @@ spring:
 wutsi:
   application:
     name: "wutsi-security"
-    key:
-      algorithm: "RSA"
-      size: 2048
   platform:
     cache:
       type: "local"

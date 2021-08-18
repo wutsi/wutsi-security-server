@@ -2,7 +2,6 @@ package com.wutsi.platform.security.dto
 
 import org.springframework.format.`annotation`.DateTimeFormat
 import java.time.OffsetDateTime
-import javax.validation.constraints.Size
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.Long
@@ -12,7 +11,6 @@ import kotlin.collections.List
 public data class Application(
     public val id: Long = 0,
     public val name: String = "",
-    @get:Size(max = 30)
     public val title: String = "",
     public val description: String? = null,
     public val securityLevel: Int = 0,

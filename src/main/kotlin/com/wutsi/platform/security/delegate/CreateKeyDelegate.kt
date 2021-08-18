@@ -3,7 +3,6 @@ package com.wutsi.platform.security.`delegate`
 import com.wutsi.platform.security.dao.KeyRepository
 import com.wutsi.platform.security.dto.CreateKeyResponse
 import com.wutsi.platform.security.entity.KeyEntity
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.security.KeyPair
 import java.security.KeyPairGenerator
@@ -13,10 +12,13 @@ import javax.transaction.Transactional
 
 @Service
 public class CreateKeyDelegate(
-    private val dao: KeyRepository,
-    @Value("\${wutsi.application.key.algorithm}") private val keyAlgorithm: String,
-    @Value("\${wutsi.application.key.size}") private val keySize: Int
+    private val dao: KeyRepository
 ) {
+    companion object {
+        const val ALGO = "RSA"
+        const val KEY_SIZE = 2048
+    }
+
     @Transactional
     fun invoke(): CreateKeyResponse {
         val key = createKey()
@@ -32,7 +34,7 @@ public class CreateKeyDelegate(
         val encoder = Base64.getEncoder()
         return dao.save(
             KeyEntity(
-                algorithm = keyAlgorithm,
+                algorithm = ALGO,
                 active = true,
                 created = OffsetDateTime.now(),
                 expired = null,
@@ -43,8 +45,8 @@ public class CreateKeyDelegate(
     }
 
     private fun createKeyPair(): KeyPair {
-        val generator = KeyPairGenerator.getInstance(keyAlgorithm)
-        generator.initialize(keySize)
+        val generator = KeyPairGenerator.getInstance(ALGO)
+        generator.initialize(KEY_SIZE)
         return generator.generateKeyPair()
     }
 

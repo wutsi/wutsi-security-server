@@ -1,12 +1,12 @@
 package com.wutsi.platform.security.endpoint
 
 import com.wutsi.platform.security.dao.KeyRepository
+import com.wutsi.platform.security.delegate.CreateKeyDelegate
 import com.wutsi.platform.security.dto.CreateKeyResponse
 import com.wutsi.platform.security.entity.KeyEntity
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
@@ -26,9 +26,6 @@ class CreateKeyControllerTest {
     @Autowired
     private lateinit var dao: KeyRepository
 
-    @Value("\${wutsi.application.key.algorithm}")
-    private lateinit var keyAlgorithm: String
-
     private val rest = RestTemplate()
     private lateinit var url: String
 
@@ -44,7 +41,7 @@ class CreateKeyControllerTest {
 
         // Key is created
         val key = dao.findById(response.body.id).get()
-        assertEquals(keyAlgorithm, key.algorithm)
+        assertEquals(CreateKeyDelegate.ALGO, key.algorithm)
         assertTrue(key.active)
         assertNotNull(key.created)
         assertNull(key.expired)
