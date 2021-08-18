@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.core.error.ErrorResponse
 import com.wutsi.platform.security.dao.KeyRepository
+import com.wutsi.platform.security.dao.LoginRepository
 import com.wutsi.platform.security.dto.LoginRequest
 import com.wutsi.platform.security.dto.LoginResponse
 import com.wutsi.platform.security.service.jwt.JWTService
@@ -18,6 +19,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -31,6 +33,9 @@ public class LoginControllerTest {
 
     @Autowired
     private lateinit var keyDao: KeyRepository
+
+    @Autowired
+    private lateinit var dao: LoginRepository
 
     @BeforeEach
     fun setUp() {
@@ -52,12 +57,19 @@ public class LoginControllerTest {
         assertTrue(response.body.accessToken.isNotEmpty())
         println(response.body.accessToken)
 
+        // Login
+        val login = dao.findById(response.body.id).get()
+        assertEquals(response.body.accessToken, login.accessToken)
+        assertTrue(login.active)
+        assertNotNull(login.expires)
+        assertEquals(1L, login.application?.id)
+
         // Verify
         val decoded = JWT.decode(response.body.accessToken)
         assertEquals(JWTService.ISSUER, decoded.issuer)
         assertEquals("urn:application:wutsi:1", decoded.subject)
         assertEquals(key.id.toString(), decoded.keyId)
-        assertEquals(JWTService.APP_TOKEN_TTL / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)
+        assertEquals(JWTService.APP_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)
         assertEquals("com.wutsi.application.test", decoded.claims["name"]?.asString())
         assertEquals(listOf("user-read-basic", "user-read-email"), decoded.claims["scope"]?.asList(String::class.java))
     }
