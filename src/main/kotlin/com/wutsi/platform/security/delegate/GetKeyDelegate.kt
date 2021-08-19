@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class GetKeyDelegate(private val service: KeyService) {
-    fun invoke(): GetKeyResponse {
-        val key = service.getKey()
+    fun invoke(id: Long): GetKeyResponse {
+        val key = service.getKey(id)
         return GetKeyResponse(
             key = Key(
                 algorithm = key.algorithm,

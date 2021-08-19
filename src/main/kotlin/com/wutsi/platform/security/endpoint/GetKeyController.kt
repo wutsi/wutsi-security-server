@@ -4,6 +4,7 @@ import com.wutsi.platform.security.`delegate`.GetKeyDelegate
 import com.wutsi.platform.security.dto.GetKeyResponse
 import org.springframework.web.bind.`annotation`.CrossOrigin
 import org.springframework.web.bind.`annotation`.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.`annotation`.RestController
 
 @RestController
@@ -22,6 +23,6 @@ import org.springframework.web.bind.`annotation`.RestController
 public class GetKeyController(
     private val `delegate`: GetKeyDelegate
 ) {
-    @GetMapping("/v1/keys")
-    public fun invoke(): GetKeyResponse = delegate.invoke()
+    @GetMapping("/v1/keys/{id}")
+    public fun invoke(@PathVariable id: Long): GetKeyResponse = delegate.invoke(id)
 }
