@@ -45,6 +45,11 @@ class CreateKeyControllerTest {
         assertTrue(key.active)
         assertNotNull(key.created)
         assertNull(key.expired)
+        assertNotNull(key.privateKey)
+        assertNotNull(key.publicKey)
+
+        println(">>> Public Key:" + key.publicKey)
+        println(">>> Private Key:" + key.privateKey)
 
         // Previous keys are expired
         dao.findAll()

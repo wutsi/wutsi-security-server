@@ -21,6 +21,11 @@ spring:
   main:
     lazy-initialization: false
 
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+
   jackson:
     deserialization:
       FAIL_ON_UNKNOWN_PROPERTIES: false
@@ -56,17 +61,19 @@ spring:
 
 wutsi:
   application:
-    name: "wutsi-security"
+    name: wutsi-security
   platform:
     cache:
-      type: "local"
+      type: local
+    security:
+      type: none
     stream:
       name: "${wutsi.application.name}"
-      type: "local"
+      type: local
     tracing:
       client-id: "${wutsi.application.name}"
       device-id-provider:
-        type: "header"
+        type: header
 
 
 logging:
