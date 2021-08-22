@@ -4,9 +4,7 @@
 [![](https://img.shields.io/badge/maven-3.6-brightgreen.svg)](https://maven.apache.org/download.cgi)
 ![](https://img.shields.io/badge/language-kotlin-blue.svg)
 
-Wutsi Security Server. It provides the following features:
-- [JWT](https://jwt.io) authentication
-- Application registration
+JWT Authentication Server
 
 # Installation Prerequisites
 ## Database Setup
