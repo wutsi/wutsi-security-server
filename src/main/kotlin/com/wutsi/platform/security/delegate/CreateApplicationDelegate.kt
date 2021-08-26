@@ -35,7 +35,7 @@ public class CreateApplicationDelegate(
                     securityLevel = request.securityLevel,
                     homeUrl = request.homeUrl,
                     configUrl = request.configUrl,
-                    scopes = toScopes(request),
+                    scopes = toScopes(request).toMutableList(),
                     created = OffsetDateTime.now()
                 )
             )

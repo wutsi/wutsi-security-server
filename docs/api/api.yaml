@@ -4,7 +4,7 @@ info:
   description: |
     Wutsi Security Server. It provides the following features:
 
-    - [JWT](https://jwt.io) authentication
+    - [JWT](https://jwt.io) Authentication
     - Application registration
   version: "1.0.0"
 
@@ -16,23 +16,6 @@ servers:
 
 paths:
   /v1/keys:
-    get:
-      operationId: "get-key"
-      description: |
-        Return the current server's key.
-        This key can be used for:
-          - decrypting messages
-          - verifying signatures
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetKeyResponse'
-      tags:
-        - Security
-
     post:
       operationId: "create-key"
       description: |
@@ -44,6 +27,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateKeyResponse'
+      tags:
+        - Security
+
+  /v1/keys/{id}:
+    get:
+      operationId: "get-key"
+      description: |
+        Return the current server's key.
+        This key can be used for:
+          - decrypting messages
+          - verifying signatures
+      parameters:
+        - in: path
+          name: id
+          description: ID of the key
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetKeyResponse'
       tags:
         - Security
 
@@ -60,6 +69,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SearchScopeResponse'
+      tags:
+        - Security
+
+    post:
+      operationId: "create-scope"
+      description: |
+        Create a new scope
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScopeRequest'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateScopeResponse'
       tags:
         - Security
 
@@ -108,6 +137,32 @@ paths:
       tags:
         - Security
 
+  /v1/applications/{id}/scopes:
+    post:
+      operationId: "grant-scopes"
+      description: |
+        Grant a scope to an application
+      parameters:
+        - in: path
+          name: id
+          description: ID of the application
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GrantScopeRequest'
+      responses:
+        200:
+          description: Success
+      tags:
+        - Security
+
+
   /v1/login:
     post:
       operationId: "login"
@@ -146,16 +201,6 @@ components:
           type: object
           $ref: "#/components/schemas/Key"
 
-    Key:
-      type: object
-      properties:
-        algorithm:
-          type: string
-          description: Name of the security algorithm
-        content:
-          type: string
-          description: Content of the key, based-64 encoded
-
     SearchScopeResponse:
       type: object
       properties:
@@ -163,27 +208,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Scope"
-
-    Scope:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: ID of the scope
-        name:
-          type: string
-          description: Name of the scope
-        description:
-          type: string
-          description: Description of the scope
-          nullable: true
-        securityLevel:
-          type: integer
-          description: Security Level required to get this scope
-        active:
-          type: boolean
-          description: Is the scope active or not?
 
     CreateApplicationRequest:
       type: object
@@ -237,6 +261,60 @@ components:
           type: object
           $ref: "#/components/schemas/Application"
 
+    LoginRequest:
+      type: object
+      properties:
+        apiKey:
+          type: string
+          description: Application API Key
+      required:
+        - apiKey
+
+    LoginResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID of the login session
+        accessToken:
+          type: string
+          description: Access token
+
+    CreateScopeRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the scope
+        description:
+          type: string
+          description: Description of the scope
+        securityLevel:
+          type: integer
+          description: Security level required to be granted this scope
+      required:
+        - name
+
+    CreateScopeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID of the scope created
+
+    GrantScopeRequest:
+      type: object
+      properties:
+        scopeNames:
+          type: array
+          items:
+            type: string
+      required:
+        - scopeNames
+
+
     Application:
       type: object
       properties:
@@ -244,6 +322,9 @@ components:
           type: integer
           format: int64
           description: ID of the application
+        apiKey:
+          type: string
+          description: Application API key
         name:
           type: string
           description: Name of the application
@@ -281,27 +362,33 @@ components:
           items:
             $ref: "#/components/schemas/Scope"
 
-    LoginRequest:
+    Key:
       type: object
       properties:
-        apiKey:
+        algorithm:
           type: string
-          description: Application API Key
-      required:
-        - apiKey
+          description: Name of the security algorithm
+        content:
+          type: string
+          description: Content of the key, based-64 encoded
 
-    LoginResponse:
+    Scope:
       type: object
       properties:
-        accessToken:
+        id:
+          type: integer
+          format: int64
+          description: ID of the scope
+        name:
           type: string
-          description: Access token
-        created:
+          description: Name of the scope
+        description:
           type: string
-          format: date-time
-          description: Creation date/time
-        expires:
-          type: string
-          format: date-time
-          description: Expiry date/time
-
+          description: Description of the scope
+          nullable: true
+        securityLevel:
+          type: integer
+          description: Security Level required to get this scope
+        active:
+          type: boolean
+          description: Is the scope active or not?

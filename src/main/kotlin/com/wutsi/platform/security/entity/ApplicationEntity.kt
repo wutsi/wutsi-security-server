@@ -34,5 +34,5 @@ data class ApplicationEntity(
         joinColumns = arrayOf(JoinColumn(name = "application_fk")),
         inverseJoinColumns = arrayOf(JoinColumn(name = "scope_fk"))
     )
-    val scopes: List<ScopeEntity> = emptyList()
+    val scopes: MutableList<ScopeEntity> = mutableListOf()
 )

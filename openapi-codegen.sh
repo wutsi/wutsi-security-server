@@ -1,6 +1,6 @@
 #/bin/sh
 
-CODEGEN_VERSION="0.0.50-SNAPSHOT"
+CODEGEN_VERSION="0.0.54-SNAPSHOT"
 CODEGEN_JAR=~/wutsi-codegen/wutsi-codegen-${CODEGEN_VERSION}.jar
 
 API_NAME=wutsi-security

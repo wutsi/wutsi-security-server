@@ -25,7 +25,7 @@ public class GetKeyControllerTest {
 
     @BeforeEach
     fun setUp() {
-        url = "http://localhost:$port/v1/keys/3"
+        url = "http://localhost:$port/v1/keys/300"
     }
 
     @Test
