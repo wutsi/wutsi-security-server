@@ -33,6 +33,7 @@ public class GetApplicationControllerTest {
         val app = response.body.application
         assertEquals("com.wutsi.application.test", app.name)
         assertEquals("Test", app.title)
+        assertEquals("0000-1111", app.apiKey)
         assertEquals("This is the description", app.description)
         assertEquals("https://test.herokuapp.com/config", app.configUrl)
         assertEquals("https://test.herokuapp.com", app.homeUrl)
