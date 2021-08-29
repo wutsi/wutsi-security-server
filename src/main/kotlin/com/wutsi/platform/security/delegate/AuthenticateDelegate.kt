@@ -30,6 +30,12 @@ public class AuthenticateDelegate(
         }
 
         authenticator.validate(request)
-        return authenticator.authenticate(request)
+        val login = authenticator.authenticate(request)
+        return AuthenticationResponse(
+            id = login.id ?: -1,
+            accessToken = login.accessToken,
+            created = login.created,
+            expires = login.expires
+        )
     }
 }

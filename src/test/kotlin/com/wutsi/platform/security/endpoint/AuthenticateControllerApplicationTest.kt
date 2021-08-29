@@ -19,12 +19,11 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/AuthenticateController.sql"])
-public class AuthenticateControllerTest {
+public class AuthenticateControllerApplicationTest {
     @LocalServerPort
     public val port: Int = 0
 
@@ -62,7 +61,8 @@ public class AuthenticateControllerTest {
         val login = dao.findById(response.body.id).get()
         assertEquals(response.body.accessToken, login.accessToken)
         assertTrue(login.active)
-        assertNotNull(login.expires)
+        assertEquals(response.body.created.toInstant().toEpochMilli(), login.created.toInstant().toEpochMilli())
+        assertEquals(response.body.expires.toInstant().toEpochMilli(), login.expires.toInstant().toEpochMilli())
         assertEquals(1L, login.application?.id)
 
         // Verify

@@ -8,7 +8,6 @@ import com.wutsi.platform.core.error.exception.ConflictException
 import com.wutsi.platform.security.dao.ApplicationRepository
 import com.wutsi.platform.security.dao.LoginRepository
 import com.wutsi.platform.security.dto.AuthenticationRequest
-import com.wutsi.platform.security.dto.AuthenticationResponse
 import com.wutsi.platform.security.entity.ApplicationEntity
 import com.wutsi.platform.security.entity.LoginEntity
 import com.wutsi.platform.security.service.jwt.JWTService
@@ -37,16 +36,12 @@ public class ApplicationAuthenticator(
             )
     }
 
-    override fun authenticate(request: AuthenticationRequest): AuthenticationResponse {
+    override fun authenticate(request: AuthenticationRequest): LoginEntity {
         val app = findApplication(request.apiKey!!)
         ensureActive(app)
 
         val token = jwt.createToken(app, keyProvider)
-        val login = createLogin(token, app)
-        return AuthenticationResponse(
-            id = login.id ?: -1,
-            accessToken = token
-        )
+        return createLogin(token, app)
     }
 
     private fun createLogin(token: String, application: ApplicationEntity): LoginEntity =
