@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.core.error.ErrorResponse
 import com.wutsi.platform.security.dao.KeyRepository
 import com.wutsi.platform.security.dao.LoginRepository
-import com.wutsi.platform.security.dto.LoginRequest
-import com.wutsi.platform.security.dto.LoginResponse
+import com.wutsi.platform.security.dto.AuthenticationRequest
+import com.wutsi.platform.security.dto.AuthenticationResponse
 import com.wutsi.platform.security.service.jwt.JWTService
 import com.wutsi.platform.security.util.ErrorURN
 import org.junit.jupiter.api.BeforeEach
@@ -23,8 +23,8 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/clean.sql", "/db/LoginController.sql"])
-public class LoginControllerTest {
+@Sql(value = ["/db/clean.sql", "/db/AuthenticateController.sql"])
+public class AuthenticateControllerTest {
     @LocalServerPort
     public val port: Int = 0
 
@@ -39,7 +39,7 @@ public class LoginControllerTest {
 
     @BeforeEach
     fun setUp() {
-        url = "http://localhost:$port/v1/login"
+        url = "http://localhost:$port/v1/auth"
     }
 
     @Test
@@ -48,10 +48,11 @@ public class LoginControllerTest {
         println("public: ${key.publicKey}")
         println("private: ${key.privateKey}")
 
-        val request = LoginRequest(
+        val request = AuthenticationRequest(
+            type = "application",
             apiKey = "0000-1111"
         )
-        val response = rest.postForEntity(url, request, LoginResponse::class.java)
+        val response = rest.postForEntity(url, request, AuthenticationResponse::class.java)
 
         assertEquals(200, response.statusCodeValue)
         assertTrue(response.body.accessToken.isNotEmpty())
@@ -76,11 +77,12 @@ public class LoginControllerTest {
 
     @Test
     fun `login with inactive app`() {
-        val request = LoginRequest(
+        val request = AuthenticationRequest(
+            type = "application",
             apiKey = "inactive-key"
         )
         val ex = assertThrows<HttpClientErrorException> {
-            rest.postForEntity(url, request, LoginResponse::class.java)
+            rest.postForEntity(url, request, AuthenticationResponse::class.java)
         }
 
         assertEquals(409, ex.rawStatusCode)
@@ -91,16 +93,33 @@ public class LoginControllerTest {
 
     @Test
     fun `login with invid api-key`() {
-        val request = LoginRequest(
+        val request = AuthenticationRequest(
+            type = "application",
             apiKey = "????"
         )
         val ex = assertThrows<HttpClientErrorException> {
-            rest.postForEntity(url, request, LoginResponse::class.java)
+            rest.postForEntity(url, request, AuthenticationResponse::class.java)
         }
 
         assertEquals(409, ex.rawStatusCode)
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals(ErrorURN.APPLICATION_NOT_FOUND.urn, response.error.code)
+    }
+
+    @Test
+    fun `login with no api-key`() {
+        val request = AuthenticationRequest(
+            type = "application",
+            apiKey = null
+        )
+        val ex = assertThrows<HttpClientErrorException> {
+            rest.postForEntity(url, request, AuthenticationResponse::class.java)
+        }
+
+        assertEquals(400, ex.rawStatusCode)
+
+        val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+        assertEquals(ErrorURN.AUTHENTICATION_API_KEY_REQUIRED.urn, response.error.code)
     }
 }
