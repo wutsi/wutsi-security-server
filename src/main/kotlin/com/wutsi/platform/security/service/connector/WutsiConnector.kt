@@ -30,7 +30,8 @@ class WutsiConnector(
             displayName = accounts[0].displayName,
             active = accounts[0].status == "active",
             language = accounts[0].language,
-            scopes = SCOPES
+            scopes = SCOPES,
+            admin = accounts[0].superUser
         )
     }
 }

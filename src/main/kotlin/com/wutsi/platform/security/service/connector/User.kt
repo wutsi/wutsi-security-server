@@ -5,5 +5,6 @@ data class User(
     val displayName: String? = null,
     val active: Boolean = true,
     val language: String = "en",
-    val scopes: List<String> = emptyList()
+    val scopes: List<String> = emptyList(),
+    val admin: Boolean = false
 )

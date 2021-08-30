@@ -23,5 +23,7 @@ data class MFALoginEntity(
     val verificationId: Long = -1,
     val created: OffsetDateTime = OffsetDateTime.now(),
     val accountId: Long = -1,
-    val scopes: String? = null
+    val displayName: String? = null,
+    val scopes: String? = null,
+    val admin: Boolean = false
 )

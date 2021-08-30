@@ -12,7 +12,8 @@ import com.wutsi.platform.account.WutsiAccountApi
 import com.wutsi.platform.account.dto.AccountSummary
 import com.wutsi.platform.account.dto.SearchAccountResponse
 import com.wutsi.platform.core.error.ErrorResponse
-import com.wutsi.platform.security.dao.KeyRepository
+import com.wutsi.platform.core.security.spring.jwt.JWTBuilder
+import com.wutsi.platform.core.security.spring.jwt.JWTSubjectType
 import com.wutsi.platform.security.dao.LoginRepository
 import com.wutsi.platform.security.dao.MFALoginRepository
 import com.wutsi.platform.security.dto.AuthenticationRequest
@@ -48,9 +49,6 @@ class AuthenticateControllerSMSTest {
     private lateinit var url: String
 
     @Autowired
-    private lateinit var keyDao: KeyRepository
-
-    @Autowired
     private lateinit var dao: LoginRepository
 
     @Autowired
@@ -69,7 +67,7 @@ class AuthenticateControllerSMSTest {
 
     @Test
     fun `send validation code`() {
-        setupSearchAccount(id = 333)
+        setupSearchAccount(id = 333, displayName = "Ray Sponsible")
         setupSendSMSVerification(777)
 
         val request = AuthenticationRequest(
@@ -89,7 +87,9 @@ class AuthenticateControllerSMSTest {
         val mfa = mfaDao.findByToken(token).get()
         assertEquals(777L, mfa.verificationId)
         assertEquals(333L, mfa.accountId)
+        assertEquals("Ray Sponsible", mfa.displayName)
         assertEquals("user-read,user-manage", mfa.scopes)
+        assertTrue(mfa.admin)
     }
 
     @Test
@@ -154,11 +154,12 @@ class AuthenticateControllerSMSTest {
 
         // Verify
         val decoded = JWT.decode(response.body.accessToken)
-        assertEquals(JWTService.ISSUER, decoded.issuer)
         assertEquals("33", decoded.subject)
         assertEquals("1", decoded.keyId)
-        assertEquals("user", decoded.claims["sub_type"]?.asString())
-        assertEquals(listOf("payment-read", "user-read"), decoded.claims["scope"]?.asList(String::class.java))
+        assertEquals(JWTSubjectType.JWT_SUBJECT_TYPE_USER.name, decoded.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString())
+        assertEquals("Ray Sponsible", decoded.claims[JWTBuilder.CLAIM_SUBJECT_NAME]?.asString())
+        assertEquals(true, decoded.claims[JWTBuilder.CLAIM_ADMIN]?.asBoolean())
+        assertEquals(listOf("payment-read", "user-read"), decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java))
         assertEquals(JWTService.USER_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)
     }
 
@@ -214,11 +215,11 @@ class AuthenticateControllerSMSTest {
         assertEquals(ErrorURN.VERIFICATION_CODE_MISSING.urn, response.error.code)
     }
 
-    private fun setupSearchAccount(id: Long = 333, status: String = "active", found: Boolean = true) {
+    private fun setupSearchAccount(id: Long = 333, status: String = "active", found: Boolean = true, displayName: String = "Foo") {
         if (found) {
             val response = SearchAccountResponse(
                 listOf(
-                    AccountSummary(id = id, status = status)
+                    AccountSummary(id = id, status = status, displayName = displayName, superUser = true)
                 )
             )
             doReturn(response).whenever(accountApi).searchAccount(any(), any(), any())

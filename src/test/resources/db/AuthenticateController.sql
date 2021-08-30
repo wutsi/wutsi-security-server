@@ -29,6 +29,6 @@ INSERT INTO T_KEY(id, algorithm, public_key, private_key, active, created)
          '2011-01-01')
 ;
 
-INSERT INTO T_MFA_LOGIN(id, account_id, type, token, verification_id, scopes)
+INSERT INTO T_MFA_LOGIN(id, account_id, type, token, verification_id, scopes, admin, display_name)
     VALUES
-        (100, 33, 1, '0000000', 333, 'user-read,payment-read');
+        (100, 33, 1, '0000000', 333, 'user-read,payment-read', true, 'Ray Sponsible');

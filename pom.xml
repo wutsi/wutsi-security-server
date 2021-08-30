@@ -35,8 +35,8 @@
     <postgresql.version>42.2.23</postgresql.version>
     <flyway.version>7.14.0</flyway.version>
 
-    <wutsi-platform-core.version>0.0.33</wutsi-platform-core.version>
-    <wutsi-account.version>1.0.2</wutsi-account.version>
+    <wutsi-platform-core.version>0.0.35</wutsi-platform-core.version>
+    <wutsi-account.version>1.0.4</wutsi-account.version>
     <wutsi-sms.version>1.0.2</wutsi-sms.version>
   </properties>
 

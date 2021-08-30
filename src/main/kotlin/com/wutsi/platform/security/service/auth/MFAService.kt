@@ -10,7 +10,7 @@ import java.util.Optional
 import javax.transaction.Transactional
 
 @Service
-public class MFAService(private val dao: MFALoginRepository) {
+class MFAService(private val dao: MFALoginRepository) {
     @Async
     @Transactional
     fun saveAsync(type: MFALoginType, user: User, token: String, verificationId: Long) {
@@ -20,7 +20,9 @@ public class MFAService(private val dao: MFALoginRepository) {
                 token = token,
                 type = type,
                 verificationId = verificationId,
-                scopes = user.scopes.joinToString(separator = ",")
+                scopes = user.scopes.joinToString(separator = ","),
+                admin = user.admin,
+                displayName = user.displayName
             )
         )
     }
