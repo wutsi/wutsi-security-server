@@ -3,7 +3,6 @@ package com.wutsi.platform.security.service.jwt
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.RSAKeyProvider
-import com.wutsi.platform.core.util.URN
 import com.wutsi.platform.security.entity.ApplicationEntity
 import com.wutsi.platform.security.entity.MFALoginEntity
 import org.springframework.stereotype.Service
@@ -12,7 +11,7 @@ import java.util.Date
 @Service
 class JWTService {
     companion object {
-        const val ISSUER = "Wutsi"
+        const val ISSUER = "wutsi.com"
         const val APP_TOKEN_TTL_MILLIS: Long = 60 * 84600000 // 60 days
         const val USER_TOKEN_TTL_MILLIS: Long = 1 * 84600000 // 1 day
     }
@@ -30,8 +29,8 @@ class JWTService {
             .withIssuedAt(Date(now))
             .withExpiresAt(Date(now + ttl))
             .withJWTId(keyProvider.privateKeyId)
-            .withSubject(URN.of("application", app.id.toString()).toString())
-            .withClaim("name", app.name)
+            .withSubject(app.id.toString())
+            .withClaim("sub_type", "application")
             .withClaim("scope", scope)
             .sign(Algorithm.RSA256(keyProvider))
     }
@@ -46,7 +45,8 @@ class JWTService {
             .withIssuedAt(Date(now))
             .withExpiresAt(Date(now + ttl))
             .withJWTId(keyProvider.privateKeyId)
-            .withSubject(URN.of("account", mfa.accountId.toString()).value)
+            .withSubject(mfa.accountId.toString())
+            .withClaim("sub_type", "user")
             .withClaim("scope", scope)
             .sign(Algorithm.RSA256(keyProvider))
     }

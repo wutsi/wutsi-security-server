@@ -40,7 +40,7 @@ import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/AuthenticateController.sql"])
-public class AuthenticateControllerSMSTest {
+class AuthenticateControllerSMSTest {
     @LocalServerPort
     val port: Int = 0
 
@@ -155,10 +155,11 @@ public class AuthenticateControllerSMSTest {
         // Verify
         val decoded = JWT.decode(response.body.accessToken)
         assertEquals(JWTService.ISSUER, decoded.issuer)
-        assertEquals("urn:account:wutsi:33", decoded.subject)
+        assertEquals("33", decoded.subject)
         assertEquals("1", decoded.keyId)
-        assertEquals(JWTService.USER_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)
+        assertEquals("user", decoded.claims["sub_type"]?.asString())
         assertEquals(listOf("payment-read", "user-read"), decoded.claims["scope"]?.asList(String::class.java))
+        assertEquals(JWTService.USER_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)
     }
 
     @Test
