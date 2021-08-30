@@ -8,4 +8,5 @@ import java.util.Optional
 @Repository
 interface ApplicationRepository : CrudRepository<ApplicationEntity, Long> {
     fun findByApiKey(apiKey: String): Optional<ApplicationEntity>
+    fun findByName(name: String): Optional<ApplicationEntity>
 }

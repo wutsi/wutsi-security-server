@@ -34,7 +34,10 @@
     <hikari-cp.version>5.0.0</hikari-cp.version>
     <postgresql.version>42.2.23</postgresql.version>
     <flyway.version>7.14.0</flyway.version>
-    <wutsi-platform-core.version>0.0.31</wutsi-platform-core.version>
+
+    <wutsi-platform-core.version>0.0.33</wutsi-platform-core.version>
+    <wutsi-account.version>1.0.2</wutsi-account.version>
+    <wutsi-sms.version>1.0.2</wutsi-sms.version>
   </properties>
 
   <dependencies>
@@ -47,6 +50,16 @@
       <groupId>com.wutsi</groupId>
       <artifactId>wutsi-platform-core</artifactId>
       <version>${wutsi-platform-core.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.wutsi.platform.account</groupId>
+      <artifactId>wutsi-account-sdk-kotlin</artifactId>
+      <version>${wutsi-account.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.wutsi.platform.sms</groupId>
+      <artifactId>wutsi-sms-sdk-kotlin</artifactId>
+      <version>${wutsi-sms.version}</version>
     </dependency>
 
     <dependency>

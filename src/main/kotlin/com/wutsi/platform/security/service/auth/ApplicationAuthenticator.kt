@@ -27,7 +27,7 @@ public class ApplicationAuthenticator(
         if (request.apiKey.isNullOrEmpty())
             throw BadRequestException(
                 error = Error(
-                    code = ErrorURN.AUTHENTICATION_API_KEY_REQUIRED.urn,
+                    code = ErrorURN.API_KEY_MISSING.urn,
                     parameter = Parameter(
                         name = "apiKey",
                         type = PARAMETER_TYPE_PAYLOAD
@@ -41,19 +41,16 @@ public class ApplicationAuthenticator(
         ensureActive(app)
 
         val token = jwt.createToken(app, keyProvider)
-        return createLogin(token, app)
-    }
-
-    private fun createLogin(token: String, application: ApplicationEntity): LoginEntity =
-        dao.save(
+        return dao.save(
             LoginEntity(
                 accessToken = token,
-                application = application,
+                application = app,
                 active = true,
                 created = OffsetDateTime.now(),
                 expires = OffsetDateTime.now().plusSeconds(JWTService.APP_TOKEN_TTL_MILLIS / 1000)
             )
         )
+    }
 
     private fun findApplication(apiKey: String): ApplicationEntity =
         appDao.findByApiKey(apiKey)

@@ -181,6 +181,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthenticationResponse'
+        403:
+          description: For Multi-Factor-Authentication, this error is returned in the 1st step of the authentication
+        409:
+          description: Authentication failed
       tags:
         - Authentication
 
@@ -270,12 +274,23 @@ components:
           enum:
             - application
             - sms
-            - password
         apiKey:
           type: string
           nullable: true
           description: |
-            Application API Key. Required if the authentication type is `application`
+            Application API Key. Required if the `type=application`
+        phoneNumber:
+          type: string
+          description: |
+            Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format.
+        mfaToken:
+          type: string
+          description: |
+            Multi Factor Token.
+        verificationCode:
+          type: string
+          description: |
+            Verification code. REQUIRE when `mfaToken` is provided
       required:
         - type
 
@@ -286,8 +301,9 @@ components:
           type: integer
           format: int64
           description: ID of the login session
-        type:
+        created:
           type: string
+          format: date-time
         expires:
           type: string
           format: date-time

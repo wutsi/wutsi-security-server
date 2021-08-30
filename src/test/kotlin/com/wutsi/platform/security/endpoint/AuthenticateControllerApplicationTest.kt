@@ -19,6 +19,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -64,6 +65,7 @@ public class AuthenticateControllerApplicationTest {
         assertEquals(response.body.created.toInstant().toEpochMilli(), login.created.toInstant().toEpochMilli())
         assertEquals(response.body.expires.toInstant().toEpochMilli(), login.expires.toInstant().toEpochMilli())
         assertEquals(1L, login.application?.id)
+        assertNull(login.accountId)
 
         // Verify
         val decoded = JWT.decode(response.body.accessToken)
@@ -120,6 +122,6 @@ public class AuthenticateControllerApplicationTest {
         assertEquals(400, ex.rawStatusCode)
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
-        assertEquals(ErrorURN.AUTHENTICATION_API_KEY_REQUIRED.urn, response.error.code)
+        assertEquals(ErrorURN.API_KEY_MISSING.urn, response.error.code)
     }
 }

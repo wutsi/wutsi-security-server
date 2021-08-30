@@ -23,5 +23,7 @@ data class LoginEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_fk")
-    val application: ApplicationEntity? = null
+    val application: ApplicationEntity? = null,
+
+    val accountId: Long? = null
 )

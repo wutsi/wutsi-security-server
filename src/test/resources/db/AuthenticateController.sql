@@ -9,7 +9,8 @@ INSERT INTO T_SCOPE(id, name, description, security_level, active)
 INSERT INTO T_APPLICATION(id, name, api_key, title, active, config_url, home_url, security_level, description)
     VALUES
         (1, 'com.wutsi.application.test', '0000-1111', 'Test', true, 'https://test.herokuapp.com/config', 'https://test.herokuapp.com', 3, 'This is the description'),
-        (2, 'com.wutsi.application.inactive', 'inactive-key', 'App2', false, null, null, 1, null)
+        (2, 'com.wutsi.application.inactive', 'inactive-key', 'App2', false, null, null, 1, null),
+        (100, 'com.wutsi.wutsi-security', uuid_generate_v1(), 'Wutsi Security', true, null, null, 0, null)
 ;
 
 INSERT INTO T_APPLICATION_SCOPE(application_fk, scope_fk)
@@ -28,3 +29,6 @@ INSERT INTO T_KEY(id, algorithm, public_key, private_key, active, created)
          '2011-01-01')
 ;
 
+INSERT INTO T_MFA_LOGIN(id, account_id, type, token, verification_id, scopes)
+    VALUES
+        (100, 33, 1, '0000000', 333, 'user-read,payment-read');
