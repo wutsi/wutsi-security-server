@@ -36,7 +36,7 @@
     <flyway.version>7.14.0</flyway.version>
 
     <wutsi-platform-core.version>0.0.35</wutsi-platform-core.version>
-    <wutsi-account.version>1.0.5-SNAPSHOT</wutsi-account.version>
+    <wutsi-account.version>1.0.5</wutsi-account.version>
     <wutsi-sms.version>1.0.2</wutsi-sms.version>
   </properties>
 
