@@ -26,7 +26,7 @@ public class AuthenticateDelegate(
                     parameter = Parameter(
                         name = "type",
                         value = request.type,
-                        type = ParameterType.valueOf(request.type)
+                        type = ParameterType.PARAMETER_TYPE_PAYLOAD
                     )
                 )
             )
