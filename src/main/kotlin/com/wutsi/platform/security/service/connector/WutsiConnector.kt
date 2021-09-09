@@ -11,7 +11,12 @@ class WutsiConnector(
     companion object {
         private val SCOPES = listOf(
             "user-read",
-            "user-manage"
+            "user-manage",
+            "payment-method-manage",
+            "payment-method-read",
+            "payment-charge",
+            "payment-payout",
+            "payment-transfer"
         )
     }
 
