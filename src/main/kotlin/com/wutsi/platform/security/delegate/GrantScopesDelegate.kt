@@ -6,6 +6,7 @@ import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PATH
 import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PAYLOAD
 import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.NotFoundException
+import com.wutsi.platform.core.logging.KVLogger
 import com.wutsi.platform.security.dao.ApplicationRepository
 import com.wutsi.platform.security.dao.ScopeRepository
 import com.wutsi.platform.security.dto.GrantScopeRequest
@@ -17,7 +18,8 @@ import javax.transaction.Transactional
 @Service
 public class GrantScopesDelegate(
     private val applicationDao: ApplicationRepository,
-    private val dao: ScopeRepository
+    private val dao: ScopeRepository,
+    private val logger: KVLogger
 ) {
     @Transactional
     public fun invoke(id: Long, request: GrantScopeRequest) {
@@ -52,8 +54,11 @@ public class GrantScopesDelegate(
                     }
             }
 
-        val scopeToAdd = app.scopes.filter { !scopes.contains(it) }
-        app.scopes.addAll(scopeToAdd)
-        applicationDao.save(app)
+        val scopeToAdd = scopes.filter { !app.scopes.contains(it) }
+        logger.add("scopes_to_add", scopeToAdd.size)
+        if (scopeToAdd.isNotEmpty()) {
+            app.scopes.addAll(scopeToAdd)
+            applicationDao.save(app)
+        }
     }
 }
