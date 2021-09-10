@@ -13,14 +13,14 @@ spring:
 wutsi:
   platform:
     cache:
-      type: "memcached"
+      type: memcached
       memcached:
         username: ${MEMCACHIER_USERNAME}
         password: ${MEMCACHIER_PASSWORD}
         servers: ${MEMCACHIER_SERVERS}
         ttl: 86400
     stream:
-      type: "rabbitmq"
+      type: rabbitmq
       rabbitmq:
         url: ${CLOUDAMQP_URL}
 
