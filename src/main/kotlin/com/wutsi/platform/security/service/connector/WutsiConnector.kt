@@ -33,7 +33,7 @@ class WutsiConnector(
         return User(
             id = accounts[0].id,
             displayName = accounts[0].displayName,
-            active = accounts[0].status == "active",
+            active = "active".equals(accounts[0].status, true),
             language = accounts[0].language,
             scopes = SCOPES,
             admin = accounts[0].superUser

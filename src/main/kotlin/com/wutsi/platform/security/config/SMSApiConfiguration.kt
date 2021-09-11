@@ -1,7 +1,7 @@
 package com.wutsi.platform.security.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.wutsi.platform.core.security.feign.FeignSecurityRequestInterceptor
+import com.wutsi.platform.core.security.feign.FeignAuthorizationRequestInterceptor
 import com.wutsi.platform.core.tracing.feign.FeignTracingRequestInterceptor
 import com.wutsi.platform.security.service.ApplicationTokenProvider
 import com.wutsi.platform.sms.Environment.PRODUCTION
@@ -27,7 +27,7 @@ public class SMSApiConfiguration(
             mapper = mapper,
             interceptors = listOf(
                 tracingRequestInterceptor,
-                FeignSecurityRequestInterceptor(tokenProvider)
+                FeignAuthorizationRequestInterceptor(tokenProvider)
             )
         )
 

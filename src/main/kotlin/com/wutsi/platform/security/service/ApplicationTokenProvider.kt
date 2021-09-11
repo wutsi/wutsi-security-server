@@ -17,7 +17,7 @@ class ApplicationTokenProvider(
 
     private var accessToken: String? = null
 
-    override fun geToken(): String? {
+    override fun getToken(): String? {
         if (accessToken == null)
             authenticate()
 

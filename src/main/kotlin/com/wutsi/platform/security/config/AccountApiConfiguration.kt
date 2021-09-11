@@ -5,7 +5,7 @@ import com.wutsi.platform.account.Environment.PRODUCTION
 import com.wutsi.platform.account.Environment.SANDBOX
 import com.wutsi.platform.account.WutsiAccountApi
 import com.wutsi.platform.account.WutsiAccountApiBuilder
-import com.wutsi.platform.core.security.feign.FeignSecurityRequestInterceptor
+import com.wutsi.platform.core.security.feign.FeignAuthorizationRequestInterceptor
 import com.wutsi.platform.core.tracing.feign.FeignTracingRequestInterceptor
 import com.wutsi.platform.security.service.ApplicationTokenProvider
 import org.springframework.context.annotation.Bean
@@ -27,7 +27,7 @@ public class AccountApiConfiguration(
             mapper = mapper,
             interceptors = listOf(
                 tracingRequestInterceptor,
-                FeignSecurityRequestInterceptor(tokenProvider)
+                FeignAuthorizationRequestInterceptor(tokenProvider)
             )
         )
 
