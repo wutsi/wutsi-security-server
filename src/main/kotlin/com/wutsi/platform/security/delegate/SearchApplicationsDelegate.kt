@@ -7,7 +7,7 @@ import javax.persistence.EntityManager
 import javax.persistence.Query
 
 @Service
-public class SearchApplicationDelegate(
+public class SearchApplicationsDelegate(
     private val mapper: Mapper,
     private val em: EntityManager
 ) {

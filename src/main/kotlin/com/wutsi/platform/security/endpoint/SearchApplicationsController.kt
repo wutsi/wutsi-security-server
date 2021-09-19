@@ -1,13 +1,11 @@
 package com.wutsi.platform.security.endpoint
 
-import com.wutsi.platform.security.`delegate`.SearchApplicationDelegate
+import com.wutsi.platform.security.delegate.SearchApplicationsDelegate
 import com.wutsi.platform.security.dto.SearchApplicationResponse
-import org.springframework.web.bind.`annotation`.CrossOrigin
-import org.springframework.web.bind.`annotation`.GetMapping
-import org.springframework.web.bind.`annotation`.RequestParam
-import org.springframework.web.bind.`annotation`.RestController
-import kotlin.Int
-import kotlin.String
+import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @CrossOrigin(
@@ -22,8 +20,8 @@ import kotlin.String
         org.springframework.web.bind.annotation.RequestMethod.PUT
     ]
 )
-public class SearchApplicationController(
-    private val `delegate`: SearchApplicationDelegate
+public class SearchApplicationsController(
+    private val `delegate`: SearchApplicationsDelegate
 ) {
     @GetMapping("/v1/applications")
     public fun invoke(

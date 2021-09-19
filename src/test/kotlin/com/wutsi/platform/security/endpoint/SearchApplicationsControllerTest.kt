@@ -11,7 +11,7 @@ import kotlin.test.assertNotNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/SearchApplicationController.sql"])
-public class SearchApplicationControllerTest {
+public class SearchApplicationsControllerTest {
     @LocalServerPort
     public val port: Int = 0
 
