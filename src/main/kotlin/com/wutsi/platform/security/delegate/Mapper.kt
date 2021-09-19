@@ -1,6 +1,7 @@
 package com.wutsi.platform.security.delegate
 
 import com.wutsi.platform.security.dto.Application
+import com.wutsi.platform.security.dto.ApplicationSummary
 import com.wutsi.platform.security.dto.Scope
 import com.wutsi.platform.security.entity.ApplicationEntity
 import com.wutsi.platform.security.entity.ScopeEntity
@@ -32,5 +33,18 @@ class Mapper {
                 .filter { it.active }
                 .map { toScope(it) }
                 .sortedBy { it.name }
+        )
+
+    fun toApplicationSummary(app: ApplicationEntity): ApplicationSummary =
+        ApplicationSummary(
+            id = app.id ?: -1,
+            name = app.name,
+            title = app.title,
+            apiKey = app.apiKey,
+            description = app.description,
+            configUrl = app.configUrl,
+            homeUrl = app.homeUrl,
+            securityLevel = app.securityLevel,
+            active = app.active
         )
 }
