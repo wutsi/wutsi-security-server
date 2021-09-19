@@ -3,8 +3,8 @@ package com.wutsi.platform.security.endpoint
 import com.auth0.jwt.JWT
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.core.error.ErrorResponse
+import com.wutsi.platform.core.security.SubjectType
 import com.wutsi.platform.core.security.spring.jwt.JWTBuilder
-import com.wutsi.platform.core.security.spring.jwt.JWTSubjectType
 import com.wutsi.platform.security.dao.KeyRepository
 import com.wutsi.platform.security.dao.LoginRepository
 import com.wutsi.platform.security.dto.AuthenticationRequest
@@ -73,7 +73,7 @@ class AuthenticateControllerApplicationTest {
         val decoded = JWT.decode(response.body.accessToken)
         assertEquals("1", decoded.subject)
         assertEquals("1", decoded.keyId)
-        assertEquals(JWTSubjectType.JWT_SUBJECT_TYPE_APPLICATION.name, decoded.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString())
+        assertEquals(SubjectType.APPLICATION.name, decoded.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString())
         assertEquals("com.wutsi.application.test", decoded.claims[JWTBuilder.CLAIM_SUBJECT_NAME]?.asString())
         assertEquals(false, decoded.claims[JWTBuilder.CLAIM_ADMIN]?.asBoolean())
         assertEquals(listOf("user-read-basic", "user-read-email"), decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java))

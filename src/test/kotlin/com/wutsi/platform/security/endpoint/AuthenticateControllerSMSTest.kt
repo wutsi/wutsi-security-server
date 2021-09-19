@@ -12,8 +12,8 @@ import com.wutsi.platform.account.WutsiAccountApi
 import com.wutsi.platform.account.dto.AccountSummary
 import com.wutsi.platform.account.dto.SearchAccountResponse
 import com.wutsi.platform.core.error.ErrorResponse
+import com.wutsi.platform.core.security.SubjectType
 import com.wutsi.platform.core.security.spring.jwt.JWTBuilder
-import com.wutsi.platform.core.security.spring.jwt.JWTSubjectType
 import com.wutsi.platform.security.dao.LoginRepository
 import com.wutsi.platform.security.dao.MFALoginRepository
 import com.wutsi.platform.security.dto.AuthenticationRequest
@@ -156,7 +156,7 @@ class AuthenticateControllerSMSTest {
         val decoded = JWT.decode(response.body.accessToken)
         assertEquals("33", decoded.subject)
         assertEquals("1", decoded.keyId)
-        assertEquals(JWTSubjectType.JWT_SUBJECT_TYPE_USER.name, decoded.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString())
+        assertEquals(SubjectType.USER.name, decoded.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString())
         assertEquals("Ray Sponsible", decoded.claims[JWTBuilder.CLAIM_SUBJECT_NAME]?.asString())
         assertEquals(true, decoded.claims[JWTBuilder.CLAIM_ADMIN]?.asBoolean())
         assertEquals(listOf("payment-read", "user-read"), decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java))

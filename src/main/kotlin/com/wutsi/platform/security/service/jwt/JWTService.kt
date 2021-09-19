@@ -1,8 +1,8 @@
 package com.wutsi.platform.security.service.jwt
 
 import com.auth0.jwt.interfaces.RSAKeyProvider
+import com.wutsi.platform.core.security.SubjectType
 import com.wutsi.platform.core.security.spring.jwt.JWTBuilder
-import com.wutsi.platform.core.security.spring.jwt.JWTSubjectType
 import com.wutsi.platform.security.entity.ApplicationEntity
 import com.wutsi.platform.security.entity.MFALoginEntity
 import org.springframework.stereotype.Service
@@ -18,7 +18,7 @@ class JWTService {
         JWTBuilder(
             ttl = APP_TOKEN_TTL_MILLIS,
             admin = false,
-            subjectType = JWTSubjectType.JWT_SUBJECT_TYPE_APPLICATION,
+            subjectType = SubjectType.APPLICATION,
             subjectName = app.name,
             subject = app.id.toString(),
             keyProvider = keyProvider,
@@ -32,7 +32,7 @@ class JWTService {
         JWTBuilder(
             ttl = USER_TOKEN_TTL_MILLIS,
             admin = mfa.admin,
-            subjectType = JWTSubjectType.JWT_SUBJECT_TYPE_USER,
+            subjectType = SubjectType.USER,
             subjectName = mfa.displayName ?: "",
             subject = mfa.accountId.toString(),
             keyProvider = keyProvider,
