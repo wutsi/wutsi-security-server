@@ -15,8 +15,7 @@ class WutsiConnector(
             "payment-method-manage",
             "payment-method-read",
             "payment-charge",
-            "payment-payout",
-            "payment-transfer"
+            "payment-payout"
         )
     }
 
