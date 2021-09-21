@@ -88,7 +88,7 @@ class AuthenticateControllerSMSTest {
         assertEquals(777L, mfa.verificationId)
         assertEquals(333L, mfa.accountId)
         assertEquals("Ray Sponsible", mfa.displayName)
-        assertEquals("user-read,user-manage,payment-method-manage,payment-method-read,payment-charge,payment-payout", mfa.scopes)
+        assertEquals("user-read,user-manage,payment-method-manage,payment-method-read,payment-manage,payment-read", mfa.scopes)
         assertTrue(mfa.admin)
     }
 
