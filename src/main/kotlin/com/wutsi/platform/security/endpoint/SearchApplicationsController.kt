@@ -1,11 +1,13 @@
 package com.wutsi.platform.security.endpoint
 
-import com.wutsi.platform.security.delegate.SearchApplicationsDelegate
+import com.wutsi.platform.security.`delegate`.SearchApplicationsDelegate
 import com.wutsi.platform.security.dto.SearchApplicationResponse
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.`annotation`.CrossOrigin
+import org.springframework.web.bind.`annotation`.GetMapping
+import org.springframework.web.bind.`annotation`.RequestParam
+import org.springframework.web.bind.`annotation`.RestController
+import kotlin.Int
+import kotlin.String
 
 @RestController
 @CrossOrigin(

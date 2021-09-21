@@ -28,7 +28,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateKeyResponse'
       tags:
-        - Security
+        - Key Store
 
   /v1/keys/{id}:
     get:
@@ -54,7 +54,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetKeyResponse'
       tags:
-        - Security
+        - Key Store
 
 
   /v1/scopes:
@@ -70,7 +70,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchScopeResponse'
       tags:
-        - Security
+        - Scope
 
     post:
       operationId: "create-scope"
@@ -90,12 +90,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateScopeResponse'
       tags:
-        - Security
+        - Scope
 
 
   /v1/applications:
     get:
-      operationId: "search-application"
+      operationId: "search-applications"
       description: Search applications
       parameters:
         - in: query
@@ -124,7 +124,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchApplicationResponse'
       tags:
-        - Security
+        - Application
 
     post:
       operationId: "create-application"
@@ -144,7 +144,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateApplicationResponse'
       tags:
-        - Security
+        - Application
 
   /v1/applications/{id}:
     get:
@@ -167,7 +167,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetApplicationResponse'
       tags:
-        - Security
+        - Application
 
   /v1/applications/{id}/scopes:
     post:
@@ -192,7 +192,7 @@ paths:
         200:
           description: Success
       tags:
-        - Security
+        - Application
 
 
   /v1/auth:
@@ -300,7 +300,7 @@ components:
     SearchApplicationResponse:
       type: object
       properties:
-        application:
+        applications:
           type: array
           items:
             $ref: "#/components/schemas/ApplicationSummary"
