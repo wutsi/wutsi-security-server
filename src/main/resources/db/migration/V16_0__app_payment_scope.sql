@@ -5,7 +5,8 @@ INSERT INTO T_SCOPE(name, active, security_level, description)
 ;
 
 INSERT INTO  T_APPLICATION_SCOPE(application_fk, scope_fk)
-    SELECT currval('T_APPLICATION_id_seq'), id FROM T_SCOPE WHERE name IN (
+    SELECT A.id, S.id FROM T_APPLICATION A, T_SCOPE S
+    WHERE A.name='com.wutsi.wutsi-payment' AND S.name IN (
         'payment-manage',
         'payment-read'
     );
