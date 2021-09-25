@@ -32,7 +32,7 @@
     <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
     <maven-jacoco-plugin.version>0.8.7</maven-jacoco-plugin.version>
     <hikari-cp.version>5.0.0</hikari-cp.version>
-    <postgresql.version>42.2.23</postgresql.version>
+    <postgresql.version>42.2.24</postgresql.version>
     <flyway.version>7.15.0</flyway.version>
 
     <wutsi-platform-core.version>0.0.49</wutsi-platform-core.version>
