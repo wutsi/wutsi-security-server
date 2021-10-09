@@ -310,23 +310,33 @@ components:
       properties:
         type:
           type: string
-          description: Authentication method
+          description: |
+            Authentication method. The authentication method supported are:
+            - `application`: For authenticating an application
+            - `sms`: Multi Factor Authentication of users via SMS
+              - The user enters his phone number
+              - The user receives via SMS a verification code
+              - Then the user enters the verification code to complete the authentication
+            - `runas`: For application to authenticate a given user.
+              This authentication type is restricted to a limitted set of applications.
           enum:
             - application
             - sms
+            - runas
         apiKey:
           type: string
           nullable: true
           description: |
-            Application API Key. Required if the `type=application`
+            Application API Key. **REQUIRED** if the `type=application` or `type=runas`
         phoneNumber:
           type: string
           description: |
             Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format.
+            **REQUIRED** if the `type=sms` or `type=runas`
         mfaToken:
           type: string
           description: |
-            Multi Factor Token.
+            Multi Factor Token. Must be provided for validating the verification code.
         verificationCode:
           type: string
           description: |

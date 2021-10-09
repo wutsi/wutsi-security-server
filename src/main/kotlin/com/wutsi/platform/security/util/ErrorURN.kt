@@ -8,6 +8,7 @@ enum class ErrorURN(val urn: String) {
     APPLICATION_NOT_ACTIVE(URN.of("error", "security", "application-not-active").value),
     APPLICATION_NOT_FOUND(URN.of("error", "security", "application-not-found").value),
     AUTHENTICATION_TYPE_NOT_SUPPORTED(URN.of("error", "security", "authentication-type-not-supported").value),
+    AUTHENTICATION_TYPE_NOT_ALLOWED(URN.of("error", "security", "authentication-type-not-allowed").value),
     INVALID_SCOPE(URN.of("error", "security", "invalid-scope").value),
     KEY_NOT_FOUND(URN.of("error", "security", "key-not-found").value),
     MFA_REQUIRED(URN.of("error", "security", "mfa-required").value),

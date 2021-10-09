@@ -9,14 +9,14 @@ class WutsiConnector(
     private val accountApi: WutsiAccountApi
 ) : Connector {
     companion object {
-        private val SCOPES = listOf(
+        val SCOPES = listOf(
             "user-read",
             "user-manage",
             "payment-method-manage",
             "payment-method-read",
             "payment-manage",
             "payment-read"
-        )
+        ).sorted()
     }
 
     override fun authenticate(request: AuthenticationRequest): User? {

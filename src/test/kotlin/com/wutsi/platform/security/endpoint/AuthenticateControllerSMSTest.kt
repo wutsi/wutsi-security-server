@@ -18,7 +18,8 @@ import com.wutsi.platform.security.dao.LoginRepository
 import com.wutsi.platform.security.dao.MFALoginRepository
 import com.wutsi.platform.security.dto.AuthenticationRequest
 import com.wutsi.platform.security.dto.AuthenticationResponse
-import com.wutsi.platform.security.service.jwt.JWTService
+import com.wutsi.platform.security.service.LoginService
+import com.wutsi.platform.security.service.connector.WutsiConnector
 import com.wutsi.platform.security.util.ErrorURN
 import com.wutsi.platform.sms.WutsiSmsApi
 import com.wutsi.platform.sms.dto.SendVerificationResponse
@@ -88,7 +89,7 @@ class AuthenticateControllerSMSTest {
         assertEquals(777L, mfa.verificationId)
         assertEquals(333L, mfa.accountId)
         assertEquals("Ray Sponsible", mfa.displayName)
-        assertEquals("user-read,user-manage,payment-method-manage,payment-method-read,payment-manage,payment-read", mfa.scopes)
+        assertEquals(WutsiConnector.SCOPES, mfa.scopes?.split(","))
         assertTrue(mfa.admin)
     }
 
@@ -160,7 +161,7 @@ class AuthenticateControllerSMSTest {
         assertEquals("Ray Sponsible", decoded.claims[JWTBuilder.CLAIM_SUBJECT_NAME]?.asString())
         assertEquals(true, decoded.claims[JWTBuilder.CLAIM_ADMIN]?.asBoolean())
         assertEquals(listOf("payment-read", "user-read"), decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java))
-        assertEquals(JWTService.USER_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)
+        assertEquals(LoginService.USER_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)
     }
 
     @Test

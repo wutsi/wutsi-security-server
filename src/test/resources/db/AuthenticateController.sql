@@ -3,21 +3,24 @@ INSERT INTO T_SCOPE(id, name, description, security_level, active)
         (1, 'user-read', 'Read user information', 99, false),
         (2, 'user-read-basic', 'Read user basic information', 99, true),
         (3, 'user-read-email', 'Read user email', 0, true),
-        (4, 'payment-read', 'Read payment information', 99, true)
+        (4, 'payment-read', 'Read payment information', 99, true),
+        (5, 'auth-runas', '', 0, true)
     ;
 
 INSERT INTO T_APPLICATION(id, name, api_key, title, active, config_url, home_url, security_level, description)
     VALUES
         (1, 'com.wutsi.application.test', '0000-1111', 'Test', true, 'https://test.herokuapp.com/config', 'https://test.herokuapp.com', 3, 'This is the description'),
         (2, 'com.wutsi.application.inactive', 'inactive-key', 'App2', false, null, null, 1, null),
-        (100, 'com.wutsi.wutsi-security', uuid_generate_v1(), 'Wutsi Security', true, null, null, 0, null)
+        (100, 'com.wutsi.wutsi-security', uuid_generate_v1(), 'Wutsi Security', true, null, null, 0, null),
+        (101, 'com.wutsi.application.no-permission', '0000-7777', 'Test', true, null, null, 0, null)
 ;
 
 INSERT INTO T_APPLICATION_SCOPE(application_fk, scope_fk)
     VALUES
         (1, 1),
         (1, 2),
-        (1, 3)
+        (1, 3),
+        (1, 5)
 ;
 INSERT INTO T_KEY(id, algorithm, public_key, private_key, active, created)
     VALUES

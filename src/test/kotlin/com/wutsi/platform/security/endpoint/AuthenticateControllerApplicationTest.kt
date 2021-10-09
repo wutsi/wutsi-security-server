@@ -9,7 +9,7 @@ import com.wutsi.platform.security.dao.KeyRepository
 import com.wutsi.platform.security.dao.LoginRepository
 import com.wutsi.platform.security.dto.AuthenticationRequest
 import com.wutsi.platform.security.dto.AuthenticationResponse
-import com.wutsi.platform.security.service.jwt.JWTService
+import com.wutsi.platform.security.service.LoginService
 import com.wutsi.platform.security.util.ErrorURN
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -76,8 +76,8 @@ class AuthenticateControllerApplicationTest {
         assertEquals(SubjectType.APPLICATION.name, decoded.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString())
         assertEquals("com.wutsi.application.test", decoded.claims[JWTBuilder.CLAIM_SUBJECT_NAME]?.asString())
         assertEquals(false, decoded.claims[JWTBuilder.CLAIM_ADMIN]?.asBoolean())
-        assertEquals(listOf("user-read-basic", "user-read-email"), decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java))
-        assertEquals(JWTService.APP_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)
+        assertEquals(listOf("auth-runas", "user-read-basic", "user-read-email"), decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java))
+        assertEquals(LoginService.APP_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)
     }
 
     @Test

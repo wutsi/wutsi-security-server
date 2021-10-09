@@ -6,19 +6,16 @@ import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PAYLOAD
 import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.ConflictException
 import com.wutsi.platform.core.error.exception.ForbiddenException
-import com.wutsi.platform.security.dao.LoginRepository
 import com.wutsi.platform.security.dto.AuthenticationRequest
 import com.wutsi.platform.security.entity.LoginEntity
 import com.wutsi.platform.security.entity.MFALoginType
+import com.wutsi.platform.security.service.LoginService
 import com.wutsi.platform.security.service.connector.WutsiConnector
-import com.wutsi.platform.security.service.jwt.JWTService
-import com.wutsi.platform.security.service.jwt.RSAKeyProviderImpl
 import com.wutsi.platform.security.util.ErrorURN
 import com.wutsi.platform.sms.WutsiSmsApi
 import com.wutsi.platform.sms.dto.SendVerificationRequest
 import feign.FeignException
 import org.springframework.stereotype.Service
-import java.time.OffsetDateTime
 import java.util.UUID
 
 @Service
@@ -26,9 +23,7 @@ public class SMSAuthenticator(
     private val connector: WutsiConnector,
     private val smsApi: WutsiSmsApi,
     private val mfaService: MFAService,
-    private val jwt: JWTService,
-    private val keyProvider: RSAKeyProviderImpl,
-    private val dao: LoginRepository,
+    private val loginService: LoginService,
 ) : Authenticator {
     override fun validate(request: AuthenticationRequest) {
         if (request.mfaToken.isNotEmpty()) {
@@ -104,16 +99,7 @@ public class SMSAuthenticator(
 
         try {
             smsApi.validateVerification(mfa.verificationId, request.verificationCode)
-            val token = jwt.createToken(mfa, keyProvider)
-            return dao.save(
-                LoginEntity(
-                    accessToken = token,
-                    accountId = mfa.accountId,
-                    active = true,
-                    created = OffsetDateTime.now(),
-                    expires = OffsetDateTime.now().plusSeconds(JWTService.USER_TOKEN_TTL_MILLIS / 1000)
-                )
-            )
+            return loginService.login(mfa)
         } catch (ex: FeignException) {
             if (ex.status() == 409) {
                 throw ConflictException(
