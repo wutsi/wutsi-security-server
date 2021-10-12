@@ -125,6 +125,26 @@ paths:
                 $ref: '#/components/schemas/SearchApplicationResponse'
       tags:
         - Application
+    post:
+      operationId: "create-application"
+      description: |
+        Create a new application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApplicationRequest'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateApplicationResponse'
+      tags:
+        - Application
+
 
   /v1/applications/me:
     get:
@@ -144,25 +164,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetApplicationResponse'
-      tags:
-        - Application
-    post:
-      operationId: "create-application"
-      description: |
-        Create a new application
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateApplicationRequest'
-      responses:
-        201:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateApplicationResponse'
       tags:
         - Application
 

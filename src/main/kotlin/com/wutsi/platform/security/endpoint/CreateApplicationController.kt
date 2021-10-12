@@ -12,7 +12,7 @@ import javax.validation.Valid
 public class CreateApplicationController(
     private val `delegate`: CreateApplicationDelegate
 ) {
-    @PostMapping("/v1/applications/me")
+    @PostMapping("/v1/applications")
     public fun invoke(@Valid @RequestBody request: CreateApplicationRequest):
         CreateApplicationResponse = delegate.invoke(request)
 }
