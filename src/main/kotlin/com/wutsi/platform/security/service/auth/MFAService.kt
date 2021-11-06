@@ -13,7 +13,7 @@ import javax.transaction.Transactional
 class MFAService(private val dao: MFALoginRepository) {
     @Async
     @Transactional
-    fun saveAsync(type: MFALoginType, user: User, token: String, verificationId: Long) {
+    fun saveAsync(type: MFALoginType, user: User, token: String, verificationId: Long, address: String) {
         dao.save(
             MFALoginEntity(
                 accountId = user.id,
@@ -22,7 +22,8 @@ class MFAService(private val dao: MFALoginRepository) {
                 verificationId = verificationId,
                 scopes = user.scopes.joinToString(separator = ","),
                 admin = user.admin,
-                displayName = user.displayName
+                displayName = user.displayName,
+                address = address
             )
         )
     }

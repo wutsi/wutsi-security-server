@@ -70,7 +70,7 @@ public class SMSAuthenticator(
             )
         ).id
         val token = UUID.randomUUID().toString()
-        mfaService.saveAsync(MFALoginType.MFA_LOGIN_TYPE_SMS, user, token, verificationId)
+        mfaService.saveAsync(MFALoginType.MFA_LOGIN_TYPE_SMS, user, token, verificationId, request.phoneNumber)
 
         throw ForbiddenException(
             error = Error(

@@ -51,7 +51,7 @@ class LoginService(
             ttl = USER_TOKEN_TTL_MILLIS,
             admin = mfa.admin,
             subjectType = SubjectType.USER,
-            subjectName = mfa.displayName ?: "",
+            subjectName = mfa.address,
             subject = mfa.accountId.toString(),
             keyProvider = keyProvider,
             scope = mfa.scopes?.split(',')?.sorted() ?: emptyList()

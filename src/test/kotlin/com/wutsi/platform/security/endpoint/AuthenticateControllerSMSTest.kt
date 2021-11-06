@@ -90,6 +90,7 @@ class AuthenticateControllerSMSTest {
         assertEquals(333L, mfa.accountId)
         assertEquals("Ray Sponsible", mfa.displayName)
         assertEquals(WutsiConnector.SCOPES, mfa.scopes?.split(","))
+        assertEquals(request.phoneNumber, mfa.address)
         assertTrue(mfa.admin)
     }
 
@@ -158,7 +159,7 @@ class AuthenticateControllerSMSTest {
         assertEquals("33", decoded.subject)
         assertEquals("1", decoded.keyId)
         assertEquals(SubjectType.USER.name, decoded.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString())
-        assertEquals("Ray Sponsible", decoded.claims[JWTBuilder.CLAIM_SUBJECT_NAME]?.asString())
+        assertEquals("+23799509999", decoded.claims[JWTBuilder.CLAIM_SUBJECT_NAME]?.asString())
         assertEquals(true, decoded.claims[JWTBuilder.CLAIM_ADMIN]?.asBoolean())
         assertEquals(listOf("payment-read", "user-read"), decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java))
         assertEquals(LoginService.USER_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)

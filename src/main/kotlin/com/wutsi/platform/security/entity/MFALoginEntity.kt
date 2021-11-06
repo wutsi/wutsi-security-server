@@ -25,5 +25,6 @@ data class MFALoginEntity(
     val accountId: Long = -1,
     val displayName: String? = null,
     val scopes: String? = null,
-    val admin: Boolean = false
+    val admin: Boolean = false,
+    val address: String = ""
 )
