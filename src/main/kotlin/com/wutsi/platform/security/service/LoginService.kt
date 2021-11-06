@@ -26,7 +26,7 @@ class LoginService(
             ttl = APP_TOKEN_TTL_MILLIS,
             admin = false,
             subjectType = SubjectType.APPLICATION,
-            subjectName = app.name,
+            name = app.name,
             subject = app.id.toString(),
             keyProvider = keyProvider,
             scope = app.scopes
@@ -51,10 +51,11 @@ class LoginService(
             ttl = USER_TOKEN_TTL_MILLIS,
             admin = mfa.admin,
             subjectType = SubjectType.USER,
-            subjectName = mfa.address,
+            name = mfa.displayName,
             subject = mfa.accountId.toString(),
             keyProvider = keyProvider,
-            scope = mfa.scopes?.split(',')?.sorted() ?: emptyList()
+            scope = mfa.scopes?.split(',')?.sorted() ?: emptyList(),
+            phoneNumber = mfa.address
         ).build()
 
         return dao.save(
@@ -68,15 +69,16 @@ class LoginService(
         )
     }
 
-    fun login(user: User): LoginEntity {
+    fun login(phoneNumber: String, user: User): LoginEntity {
         val token = JWTBuilder(
             ttl = USER_TOKEN_TTL_MILLIS,
             admin = user.admin,
             subjectType = SubjectType.USER,
-            subjectName = user.displayName ?: "",
+            name = user.displayName,
             subject = user.id.toString(),
             keyProvider = keyProvider,
-            scope = user.scopes
+            scope = user.scopes,
+            phoneNumber = phoneNumber
         ).build()
 
         return dao.save(

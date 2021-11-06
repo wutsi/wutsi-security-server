@@ -35,7 +35,7 @@ class WutsiConnector(
             active = "active".equals(accounts[0].status, true),
             language = accounts[0].language,
             scopes = SCOPES,
-            admin = accounts[0].superUser
+            admin = accounts[0].superUser,
         )
     }
 }

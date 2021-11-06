@@ -74,7 +74,7 @@ class AuthenticateControllerApplicationTest {
         assertEquals("1", decoded.subject)
         assertEquals("1", decoded.keyId)
         assertEquals(SubjectType.APPLICATION.name, decoded.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString())
-        assertEquals("com.wutsi.application.test", decoded.claims[JWTBuilder.CLAIM_SUBJECT_NAME]?.asString())
+        assertEquals("com.wutsi.application.test", decoded.claims[JWTBuilder.CLAIM_NAME]?.asString())
         assertEquals(false, decoded.claims[JWTBuilder.CLAIM_ADMIN]?.asBoolean())
         assertEquals(listOf("auth-runas", "user-read-basic", "user-read-email"), decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java))
         assertEquals(LoginService.APP_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)

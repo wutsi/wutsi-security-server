@@ -6,5 +6,5 @@ data class User(
     val active: Boolean = true,
     val language: String = "en",
     val scopes: List<String> = emptyList(),
-    val admin: Boolean = false
+    val admin: Boolean = false,
 )

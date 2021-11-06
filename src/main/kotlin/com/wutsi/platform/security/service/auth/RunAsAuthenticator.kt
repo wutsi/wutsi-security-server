@@ -63,7 +63,7 @@ public class RunAsAuthenticator(
                 )
             )
 
-        return loginService.login(user)
+        return loginService.login(request.phoneNumber, user)
     }
 
     private fun checkPermission(request: AuthenticationRequest) {
