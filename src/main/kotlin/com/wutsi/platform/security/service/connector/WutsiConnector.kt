@@ -15,7 +15,8 @@ class WutsiConnector(
             "payment-method-manage",
             "payment-method-read",
             "payment-manage",
-            "payment-read"
+            "payment-read",
+            "tenant-read"
         ).sorted()
     }
 
