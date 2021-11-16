@@ -18,7 +18,9 @@ class WutsiConnector(
             "payment-read",
             "tenant-read",
             "payment-manage",
-            "payment-read"
+            "payment-read",
+            "sms-send",
+            "sms-verify"
         ).sorted()
     }
 
