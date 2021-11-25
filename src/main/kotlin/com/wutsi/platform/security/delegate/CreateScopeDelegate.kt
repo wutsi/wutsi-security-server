@@ -20,7 +20,7 @@ public class CreateScopeDelegate(private val dao: ScopeRepository) {
         try {
             val scope = dao.save(
                 ScopeEntity(
-                    name = request.name.toLowerCase(),
+                    name = request.name.lowercase(),
                     description = request.description,
                     securityLevel = request.securityLevel,
                     active = true

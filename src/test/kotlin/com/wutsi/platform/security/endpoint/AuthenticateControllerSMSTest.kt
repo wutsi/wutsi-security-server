@@ -225,12 +225,12 @@ class AuthenticateControllerSMSTest {
                     AccountSummary(id = id, status = status, displayName = displayName, superUser = true)
                 )
             )
-            doReturn(response).whenever(accountApi).searchAccount(any(), any(), any())
+            doReturn(response).whenever(accountApi).searchAccount(any())
         } else {
             val response = SearchAccountResponse(
                 listOf()
             )
-            doReturn(response).whenever(accountApi).searchAccount(any(), any(), any())
+            doReturn(response).whenever(accountApi).searchAccount(any())
         }
     }
 

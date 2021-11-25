@@ -1,6 +1,7 @@
 package com.wutsi.platform.security.service.connector
 
 import com.wutsi.platform.account.WutsiAccountApi
+import com.wutsi.platform.account.dto.SearchAccountRequest
 import com.wutsi.platform.security.dto.AuthenticationRequest
 import org.springframework.stereotype.Service
 
@@ -26,9 +27,9 @@ class WutsiConnector(
 
     override fun authenticate(request: AuthenticationRequest): User? {
         val accounts = accountApi.searchAccount(
-            phoneNumber = request.phoneNumber,
-            limit = 1,
-            offset = 0
+            SearchAccountRequest(
+                phoneNumber = request.phoneNumber
+            )
         ).accounts
 
         if (accounts.isEmpty())

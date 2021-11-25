@@ -17,8 +17,8 @@ class LoginService(
     private val dao: LoginRepository
 ) {
     companion object {
-        const val APP_TOKEN_TTL_MILLIS: Long = 60 * 84600000 // 60 days
-        const val USER_TOKEN_TTL_MILLIS: Long = 1 * 84600000 // 1 day
+        const val APP_TOKEN_TTL_MILLIS: Long = 60L * 84600000L // 60 days
+        const val USER_TOKEN_TTL_MILLIS: Long = 1L * 84600000L // 1 day
     }
 
     fun login(app: ApplicationEntity): LoginEntity {

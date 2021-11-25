@@ -19,7 +19,7 @@ public class AuthenticateDelegate(
     private val runAsAuthenticator: RunAsAuthenticator
 ) {
     fun invoke(request: AuthenticationRequest): AuthenticationResponse {
-        val authenticator = when (request.type.toLowerCase()) {
+        val authenticator = when (request.type.lowercase()) {
             "application" -> applicationAuthenticator
             "sms" -> smsAuthenticator
             "runas" -> runAsAuthenticator
