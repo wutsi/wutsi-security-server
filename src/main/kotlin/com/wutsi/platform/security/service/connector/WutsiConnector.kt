@@ -21,7 +21,9 @@ class WutsiConnector(
             "payment-manage",
             "payment-read",
             "sms-send",
-            "sms-verify"
+            "sms-verify",
+            "contact-read",
+            "contact-manage"
         ).sorted()
     }
 
