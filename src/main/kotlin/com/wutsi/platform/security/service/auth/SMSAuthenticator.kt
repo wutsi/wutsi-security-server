@@ -10,6 +10,7 @@ import com.wutsi.platform.security.dto.AuthenticationRequest
 import com.wutsi.platform.security.entity.LoginEntity
 import com.wutsi.platform.security.entity.MFALoginType
 import com.wutsi.platform.security.service.LoginService
+import com.wutsi.platform.security.service.TenantProvider
 import com.wutsi.platform.security.service.connector.WutsiConnector
 import com.wutsi.platform.security.util.ErrorURN
 import com.wutsi.platform.sms.WutsiSmsApi
@@ -24,6 +25,7 @@ public class SMSAuthenticator(
     private val smsApi: WutsiSmsApi,
     private val mfaService: MFAService,
     private val loginService: LoginService,
+    private val tenantProvider: TenantProvider
 ) : Authenticator {
     override fun validate(request: AuthenticationRequest) {
         if (request.mfaToken.isNotEmpty()) {
@@ -70,7 +72,7 @@ public class SMSAuthenticator(
             )
         ).id
         val token = UUID.randomUUID().toString()
-        mfaService.saveAsync(MFALoginType.MFA_LOGIN_TYPE_SMS, user, token, verificationId, request.phoneNumber)
+        mfaService.saveAsync(MFALoginType.MFA_LOGIN_TYPE_SMS, user, token, verificationId, request.phoneNumber, tenantProvider.id())
 
         throw ForbiddenException(
             error = Error(

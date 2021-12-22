@@ -26,18 +26,16 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
-import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/AuthenticateController.sql"])
-class AuthenticateControllerRunAsTest {
+class AuthenticateControllerRunAsTest : AbstractController() {
     @LocalServerPort
     public val port: Int = 0
 
-    private val rest = RestTemplate()
     private lateinit var url: String
 
     @Autowired
@@ -47,7 +45,9 @@ class AuthenticateControllerRunAsTest {
     private lateinit var accountApi: WutsiAccountApi
 
     @BeforeEach
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
+
         url = "http://localhost:$port/v1/auth"
     }
 
@@ -58,7 +58,7 @@ class AuthenticateControllerRunAsTest {
         val request = AuthenticationRequest(
             type = "runas",
             apiKey = "0000-1111",
-            phoneNumber = "+23799505678"
+            phoneNumber = "+23799505678",
         )
         val response = rest.postForEntity(url, request, AuthenticationResponse::class.java)
 
@@ -73,6 +73,7 @@ class AuthenticateControllerRunAsTest {
         assertNull(login.application)
         assertEquals(333L, login.accountId)
         assertEquals(response.body.accessToken, login.accessToken)
+        assertEquals(TENANT_ID, login.tenantId)
 
         // Verify
         val decoded = JWT.decode(response.body.accessToken)
@@ -83,7 +84,11 @@ class AuthenticateControllerRunAsTest {
         assertEquals("+23799505678", decoded.claims[JWTBuilder.CLAIM_PHONE_NUMBER]?.asString())
         assertEquals(false, decoded.claims[JWTBuilder.CLAIM_ADMIN]?.asBoolean())
         assertEquals(WutsiConnector.SCOPES, decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java))
-        assertEquals(LoginService.USER_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)
+        assertEquals(
+            LoginService.USER_TOKEN_TTL_MILLIS / 60000,
+            (decoded.expiresAt.time - decoded.issuedAt.time) / 60000
+        )
+        assertEquals(TENANT_ID, decoded.claims[JWTBuilder.CLAIM_TENANT_ID]?.asLong())
     }
 
     @Test

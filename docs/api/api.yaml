@@ -361,7 +361,7 @@ components:
         verificationCode:
           type: string
           description: |
-            Verification code. REQUIRE when `mfaToken` is provided
+            Verification code. REQUIRED when `mfaToken` is provided
       required:
         - type
 

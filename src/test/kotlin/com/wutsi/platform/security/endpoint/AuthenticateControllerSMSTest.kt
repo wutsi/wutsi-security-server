@@ -34,7 +34,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
-import org.springframework.web.client.RestTemplate
 import java.nio.charset.Charset
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -42,11 +41,10 @@ import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/AuthenticateController.sql"])
-class AuthenticateControllerSMSTest {
+class AuthenticateControllerSMSTest : AbstractController() {
     @LocalServerPort
     val port: Int = 0
 
-    private val rest = RestTemplate()
     private lateinit var url: String
 
     @Autowired
@@ -62,7 +60,9 @@ class AuthenticateControllerSMSTest {
     private lateinit var smsApi: WutsiSmsApi
 
     @BeforeEach
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
+
         url = "http://localhost:$port/v1/auth"
     }
 
@@ -73,7 +73,7 @@ class AuthenticateControllerSMSTest {
 
         val request = AuthenticationRequest(
             type = "sms",
-            phoneNumber = "+23799505678"
+            phoneNumber = "+23799505678",
         )
         val ex = assertThrows<HttpClientErrorException> {
             rest.postForEntity(url, request, AuthenticationResponse::class.java)
@@ -92,6 +92,7 @@ class AuthenticateControllerSMSTest {
         assertEquals(WutsiConnector.SCOPES, mfa.scopes?.split(","))
         assertEquals(request.phoneNumber, mfa.address)
         assertTrue(mfa.admin)
+        assertEquals(TENANT_ID, mfa.tenantId)
     }
 
     @Test
@@ -153,6 +154,7 @@ class AuthenticateControllerSMSTest {
         assertEquals(response.body.expires.toInstant().toEpochMilli(), login.expires.toInstant().toEpochMilli())
         assertNull(login.application)
         assertEquals(33L, login.accountId)
+        assertEquals(5555L, login.tenantId)
 
         // Verify
         val decoded = JWT.decode(response.body.accessToken)
@@ -162,13 +164,27 @@ class AuthenticateControllerSMSTest {
         assertEquals("Ray Sponsible", decoded.claims[JWTBuilder.CLAIM_NAME]?.asString())
         assertEquals("+23799509999", decoded.claims[JWTBuilder.CLAIM_PHONE_NUMBER]?.asString())
         assertEquals(true, decoded.claims[JWTBuilder.CLAIM_ADMIN]?.asBoolean())
-        assertEquals(listOf("payment-read", "user-read"), decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java))
-        assertEquals(LoginService.USER_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)
+        assertEquals(
+            listOf("payment-read", "user-read"),
+            decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java)
+        )
+        assertEquals(
+            LoginService.USER_TOKEN_TTL_MILLIS / 60000,
+            (decoded.expiresAt.time - decoded.issuedAt.time) / 60000
+        )
+        assertEquals(5555L, decoded.claims[JWTBuilder.CLAIM_TENANT_ID]?.asLong())
     }
 
     @Test
     fun `validation fails on SMS validation failure`() {
-        val req = Request.create(Request.HttpMethod.POST, "https://www.google.ca", emptyMap(), ByteArray(1), Charset.defaultCharset(), null)
+        val req = Request.create(
+            Request.HttpMethod.POST,
+            "https://www.google.ca",
+            emptyMap(),
+            ByteArray(1),
+            Charset.defaultCharset(),
+            null
+        )
         val fex = FeignException.Conflict("foo", req, ByteArray(1), emptyMap())
         doThrow(fex).whenever(smsApi).validateVerification(any(), any())
 
@@ -218,7 +234,12 @@ class AuthenticateControllerSMSTest {
         assertEquals(ErrorURN.VERIFICATION_CODE_MISSING.urn, response.error.code)
     }
 
-    private fun setupSearchAccount(id: Long = 333, status: String = "active", found: Boolean = true, displayName: String = "Foo") {
+    private fun setupSearchAccount(
+        id: Long = 333,
+        status: String = "active",
+        found: Boolean = true,
+        displayName: String = "Foo"
+    ) {
         if (found) {
             val response = SearchAccountResponse(
                 listOf(

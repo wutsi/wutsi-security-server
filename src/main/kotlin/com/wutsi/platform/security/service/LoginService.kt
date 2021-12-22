@@ -55,13 +55,15 @@ class LoginService(
             subject = mfa.accountId.toString(),
             keyProvider = keyProvider,
             scope = mfa.scopes?.split(',')?.sorted() ?: emptyList(),
-            phoneNumber = mfa.address
+            phoneNumber = mfa.address,
+            tenantId = mfa.tenantId
         ).build()
 
         return dao.save(
             LoginEntity(
                 accessToken = token,
                 accountId = mfa.accountId,
+                tenantId = mfa.tenantId,
                 active = true,
                 created = OffsetDateTime.now(),
                 expires = OffsetDateTime.now().plusSeconds(APP_TOKEN_TTL_MILLIS / 1000)
@@ -69,7 +71,7 @@ class LoginService(
         )
     }
 
-    fun login(phoneNumber: String, user: User): LoginEntity {
+    fun login(phoneNumber: String, user: User, tenantId: Long?): LoginEntity {
         val token = JWTBuilder(
             ttl = USER_TOKEN_TTL_MILLIS,
             admin = user.admin,
@@ -78,13 +80,15 @@ class LoginService(
             subject = user.id.toString(),
             keyProvider = keyProvider,
             scope = user.scopes,
-            phoneNumber = phoneNumber
+            phoneNumber = phoneNumber,
+            tenantId = tenantId
         ).build()
 
         return dao.save(
             LoginEntity(
                 accessToken = token,
                 accountId = user.id,
+                tenantId = tenantId,
                 active = true,
                 created = OffsetDateTime.now(),
                 expires = OffsetDateTime.now().plusSeconds(APP_TOKEN_TTL_MILLIS / 1000)

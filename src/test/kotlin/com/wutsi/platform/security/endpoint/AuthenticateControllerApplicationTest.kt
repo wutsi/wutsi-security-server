@@ -19,18 +19,16 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
-import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/AuthenticateController.sql"])
-class AuthenticateControllerApplicationTest {
+class AuthenticateControllerApplicationTest : AbstractController() {
     @LocalServerPort
     public val port: Int = 0
 
-    private val rest = RestTemplate()
     private lateinit var url: String
 
     @Autowired
@@ -40,7 +38,9 @@ class AuthenticateControllerApplicationTest {
     private lateinit var dao: LoginRepository
 
     @BeforeEach
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
+
         url = "http://localhost:$port/v1/auth"
     }
 
@@ -68,6 +68,7 @@ class AuthenticateControllerApplicationTest {
         assertEquals(response.body.expires.toInstant().toEpochMilli(), login.expires.toInstant().toEpochMilli())
         assertEquals(1L, login.application?.id)
         assertNull(login.accountId)
+        assertNull(login.tenantId)
 
         // Verify
         val decoded = JWT.decode(response.body.accessToken)
@@ -76,8 +77,15 @@ class AuthenticateControllerApplicationTest {
         assertEquals(SubjectType.APPLICATION.name, decoded.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString())
         assertEquals("com.wutsi.application.test", decoded.claims[JWTBuilder.CLAIM_NAME]?.asString())
         assertEquals(false, decoded.claims[JWTBuilder.CLAIM_ADMIN]?.asBoolean())
-        assertEquals(listOf("auth-runas", "user-read-basic", "user-read-email"), decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java))
-        assertEquals(LoginService.APP_TOKEN_TTL_MILLIS / 60000, (decoded.expiresAt.time - decoded.issuedAt.time) / 60000)
+        assertEquals(
+            listOf("auth-runas", "user-read-basic", "user-read-email"),
+            decoded.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java)
+        )
+        assertEquals(
+            LoginService.APP_TOKEN_TTL_MILLIS / 60000,
+            (decoded.expiresAt.time - decoded.issuedAt.time) / 60000
+        )
+        assertTrue(decoded.getClaim(JWTBuilder.CLAIM_TENANT_ID).isNull)
     }
 
     @Test

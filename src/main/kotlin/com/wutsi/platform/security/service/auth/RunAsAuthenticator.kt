@@ -9,6 +9,7 @@ import com.wutsi.platform.security.dao.ApplicationRepository
 import com.wutsi.platform.security.dto.AuthenticationRequest
 import com.wutsi.platform.security.entity.LoginEntity
 import com.wutsi.platform.security.service.LoginService
+import com.wutsi.platform.security.service.TenantProvider
 import com.wutsi.platform.security.service.connector.WutsiConnector
 import com.wutsi.platform.security.util.ErrorURN
 import org.springframework.stereotype.Service
@@ -17,7 +18,8 @@ import org.springframework.stereotype.Service
 public class RunAsAuthenticator(
     private val connector: WutsiConnector,
     private val loginService: LoginService,
-    private val appDao: ApplicationRepository
+    private val appDao: ApplicationRepository,
+    private val tenantProvider: TenantProvider,
 ) : Authenticator {
     companion object {
         const val SCOPE_RUNAS: String = "auth-runas"
@@ -63,7 +65,7 @@ public class RunAsAuthenticator(
                 )
             )
 
-        return loginService.login(request.phoneNumber, user)
+        return loginService.login(request.phoneNumber, user, tenantProvider.id())
     }
 
     private fun checkPermission(request: AuthenticationRequest) {
