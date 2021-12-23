@@ -146,27 +146,6 @@ paths:
         - Application
 
 
-  /v1/applications/me:
-    get:
-      operationId: "application"
-      description: Return the information of an application by it's API-key
-      parameters:
-        - in: header
-          name: X-Api-Key
-          description: Application API Key
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetApplicationResponse'
-      tags:
-        - Application
-
   /v1/applications/{id}:
     get:
       operationId: "get-application"
