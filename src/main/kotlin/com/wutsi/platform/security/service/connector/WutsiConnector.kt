@@ -23,7 +23,9 @@ class WutsiConnector(
             "sms-send",
             "sms-verify",
             "contact-read",
-            "contact-manage"
+            "contact-manage",
+            "qr-read",
+            "qr-manage",
         ).sorted()
     }
 

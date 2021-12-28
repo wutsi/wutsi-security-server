@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class KeyService(
-    private val dao: KeyRepository
+    private val dao: KeyRepository,
 ) {
     fun getKey(): KeyEntity {
         val keys = dao.findByActive(true)
