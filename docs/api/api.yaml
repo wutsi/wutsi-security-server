@@ -220,6 +220,16 @@ paths:
       tags:
         - Authentication
 
+  /v1/logout:
+    get:
+      operationId: "logout"
+      description: Logs the current user out
+      responses:
+        200:
+          description: Success
+      tags:
+        - Authentication
+
 components:
   schemas:
     CreateKeyResponse:

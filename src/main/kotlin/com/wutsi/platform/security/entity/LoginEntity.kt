@@ -18,7 +18,7 @@ data class LoginEntity(
     val id: Long? = null,
     val tenantId: Long? = null,
     val accessToken: String = "",
-    val active: Boolean = true,
+    var active: Boolean = true,
     val created: OffsetDateTime = OffsetDateTime.now(),
     val expires: OffsetDateTime = OffsetDateTime.now(),
 
