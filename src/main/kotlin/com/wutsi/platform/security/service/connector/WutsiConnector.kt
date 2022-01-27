@@ -21,6 +21,7 @@ class WutsiConnector(
             "payment-manage",
             "payment-read",
             "sms-send",
+            "mail-send",
             "sms-verify",
             "contact-read",
             "contact-manage",
