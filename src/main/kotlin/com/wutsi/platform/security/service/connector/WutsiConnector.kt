@@ -28,7 +28,9 @@ class WutsiConnector(
             "qr-read",
             "qr-manage",
             "catalog-manage",
-            "catalog-read"
+            "catalog-read",
+            "cart-read",
+            "cart-manage"
         ).sorted()
     }
 
