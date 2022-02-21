@@ -30,7 +30,9 @@ class WutsiConnector(
             "catalog-manage",
             "catalog-read",
             "cart-read",
-            "cart-manage"
+            "cart-manage",
+            "order-read",
+            "order-manage",
         ).sorted()
     }
 
