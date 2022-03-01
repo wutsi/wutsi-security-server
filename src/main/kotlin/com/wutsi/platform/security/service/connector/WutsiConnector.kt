@@ -33,6 +33,8 @@ class WutsiConnector(
             "cart-manage",
             "order-read",
             "order-manage",
+            "shipping-read",
+            "shipping-manage",
         ).sorted()
     }
 
