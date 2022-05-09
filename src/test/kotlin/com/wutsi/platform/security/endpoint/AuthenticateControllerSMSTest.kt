@@ -36,6 +36,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
 import java.nio.charset.Charset
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -67,7 +68,7 @@ class AuthenticateControllerSMSTest : AbstractController() {
     }
 
     @Test
-    fun `send validation code`() {
+    fun `send validation code - regular user`() {
         setupSearchAccount(id = 333, displayName = "Ray Sponsible")
         setupSendSMSVerification(777)
 
@@ -91,8 +92,33 @@ class AuthenticateControllerSMSTest : AbstractController() {
         assertEquals("Ray Sponsible", mfa.displayName)
         assertEquals(WutsiConnector.SCOPES, mfa.scopes?.split(","))
         assertEquals(request.phoneNumber, mfa.address)
-        assertTrue(mfa.admin)
+        assertFalse(mfa.admin)
         assertEquals(TENANT_ID, mfa.tenantId)
+    }
+
+
+    @Test
+    fun `send validation code - admin`() {
+        setupSearchAccount(id = 333, displayName = "Ray Sponsible", superUser = true)
+        setupSendSMSVerification(777)
+
+        val request = AuthenticationRequest(
+            type = "sms",
+            phoneNumber = "+23799505678",
+        )
+        val ex = assertThrows<HttpClientErrorException> {
+            rest.postForEntity(url, request, AuthenticationResponse::class.java)
+        }
+        assertEquals(403, ex.rawStatusCode)
+
+        val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+        assertEquals(ErrorURN.MFA_REQUIRED.urn, response.error.code)
+
+        Thread.sleep(1000)
+        val token = response.error.data!!["mfaToken"].toString()
+        val mfa = mfaDao.findByToken(token).get()
+        assertEquals(listOf("user-read-basic", "user-read-email", "payment-read", "auth-runas"), mfa.scopes?.split(","))
+        assertTrue(mfa.admin)
     }
 
     @Test
@@ -238,12 +264,13 @@ class AuthenticateControllerSMSTest : AbstractController() {
         id: Long = 333,
         status: String = "active",
         found: Boolean = true,
-        displayName: String = "Foo"
+        displayName: String = "Foo",
+        superUser: Boolean = false
     ) {
         if (found) {
             val response = SearchAccountResponse(
                 listOf(
-                    AccountSummary(id = id, status = status, displayName = displayName, superUser = true)
+                    AccountSummary(id = id, status = status, displayName = displayName, superUser = superUser)
                 )
             )
             doReturn(response).whenever(accountApi).searchAccount(any())
