@@ -96,7 +96,6 @@ class AuthenticateControllerSMSTest : AbstractController() {
         assertEquals(TENANT_ID, mfa.tenantId)
     }
 
-
     @Test
     fun `send validation code - admin`() {
         setupSearchAccount(id = 333, displayName = "Ray Sponsible", superUser = true)
