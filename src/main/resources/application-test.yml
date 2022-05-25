@@ -23,4 +23,6 @@ wutsi:
       type: rabbitmq
       rabbitmq:
         url: ${CLOUDAMQP_URL}
+    security:
+      api-key: ${API_KEY}
 

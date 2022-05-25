@@ -66,6 +66,7 @@ wutsi:
       type: local
     security:
       type: none
+      api-key: "ac8acecc-65fc-11ec-b7a2-06df65522ffd"
     stream:
       name: ${wutsi.application.name}
       type: local
