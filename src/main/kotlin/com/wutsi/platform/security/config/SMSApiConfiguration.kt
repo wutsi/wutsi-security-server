@@ -1,8 +1,8 @@
 package com.wutsi.platform.security.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.wutsi.platform.core.security.TokenProvider
 import com.wutsi.platform.core.security.feign.FeignAuthorizationRequestInterceptor
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.tracing.feign.FeignTracingRequestInterceptor
 import com.wutsi.platform.sms.Environment.PRODUCTION
 import com.wutsi.platform.sms.Environment.SANDBOX
@@ -15,7 +15,7 @@ import org.springframework.core.env.Profiles
 
 @Configuration
 public class SMSApiConfiguration(
-    private val tokenProvider: TokenProvider,
+    private val tokenProvider: ApplicationTokenProvider,
     private val tracingRequestInterceptor: FeignTracingRequestInterceptor,
     private val mapper: ObjectMapper,
     private val env: Environment
