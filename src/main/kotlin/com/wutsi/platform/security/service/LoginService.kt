@@ -1,6 +1,9 @@
 package com.wutsi.platform.security.service
 
+import com.auth0.jwt.JWT
+import com.wutsi.platform.core.logging.KVLogger
 import com.wutsi.platform.core.security.SubjectType
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.security.spring.jwt.JWTBuilder
 import com.wutsi.platform.security.dao.LoginRepository
 import com.wutsi.platform.security.entity.ApplicationEntity
@@ -8,17 +11,35 @@ import com.wutsi.platform.security.entity.LoginEntity
 import com.wutsi.platform.security.entity.MFALoginEntity
 import com.wutsi.platform.security.service.connector.User
 import com.wutsi.platform.security.service.jwt.RSAKeyProviderImpl
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.OffsetDateTime
 
 @Service
 class LoginService(
     private val keyProvider: RSAKeyProviderImpl,
-    private val dao: LoginRepository
+    private val dao: LoginRepository,
+    private val logger: KVLogger,
 ) {
     companion object {
         const val APP_TOKEN_TTL_MILLIS: Long = 60L * 84600000L // 60 days
         const val USER_TOKEN_TTL_MILLIS: Long = 1L * 84600000L // 1 day
+        private val LOGGER = LoggerFactory.getLogger(LoginService::class.java)
+    }
+
+    private fun logToken(token: String) {
+        try {
+            val jwt = JWT.decode(token)
+            logger.add("jwt_name", jwt.claims[JWTBuilder.CLAIM_NAME].asString())
+            logger.add("jwt_sub", jwt.subject)
+            logger.add("jwt_sub_type", jwt.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString())
+            logger.add("jwt_scope", jwt.claims[JWTBuilder.CLAIM_SCOPE]?.asString())
+            logger.add("jwt_admin", jwt.claims[JWTBuilder.CLAIM_ADMIN]?.asString())
+            logger.add("jwt_tenant_id", jwt.claims[JWTBuilder.CLAIM_TENANT_ID]?.asString())
+            logger.add("jwt_header", jwt.header)
+        } catch (ex: Exception) {
+            LOGGER.warn("Unable to decode the JWT for logging: $token")
+        }
     }
 
     fun login(app: ApplicationEntity): LoginEntity {
@@ -34,6 +55,7 @@ class LoginService(
                 .map { it.name }
                 .sorted(),
         ).build()
+        logToken(token)
 
         return dao.save(
             LoginEntity(
@@ -58,6 +80,7 @@ class LoginService(
             phoneNumber = mfa.address,
             tenantId = mfa.tenantId
         ).build()
+        logToken(token)
 
         return dao.save(
             LoginEntity(
@@ -83,6 +106,7 @@ class LoginService(
             phoneNumber = phoneNumber,
             tenantId = tenantId
         ).build()
+        logToken(token)
 
         return dao.save(
             LoginEntity(
