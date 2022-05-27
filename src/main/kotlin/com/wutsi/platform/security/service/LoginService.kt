@@ -30,7 +30,7 @@ class LoginService(
     private fun logToken(token: String) {
         try {
             val jwt = JWT.decode(token)
-            logger.add("jwt_name", jwt.claims[JWTBuilder.CLAIM_NAME].asString())
+            logger.add("jwt_name", jwt.claims[JWTBuilder.CLAIM_NAME]?.asString())
             logger.add("jwt_sub", jwt.subject)
             logger.add("jwt_sub_type", jwt.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString())
             logger.add("jwt_scope", jwt.claims[JWTBuilder.CLAIM_SCOPE]?.asString())
