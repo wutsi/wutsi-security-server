@@ -3,7 +3,6 @@ package com.wutsi.platform.security.service
 import com.auth0.jwt.JWT
 import com.wutsi.platform.core.logging.KVLogger
 import com.wutsi.platform.core.security.SubjectType
-import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.security.spring.jwt.JWTBuilder
 import com.wutsi.platform.security.dao.LoginRepository
 import com.wutsi.platform.security.entity.ApplicationEntity
