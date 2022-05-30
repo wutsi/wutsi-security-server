@@ -14,7 +14,7 @@ import com.wutsi.platform.security.util.ErrorURN
 import org.springframework.stereotype.Service
 
 @Service
-public class ApplicationAuthenticator(
+class ApplicationAuthenticator(
     private val appDao: ApplicationRepository,
     private val loginService: LoginService
 ) : Authenticator {
@@ -42,7 +42,12 @@ public class ApplicationAuthenticator(
             .orElseThrow {
                 ConflictException(
                     error = Error(
-                        code = ErrorURN.APPLICATION_NOT_FOUND.urn
+                        code = ErrorURN.APPLICATION_NOT_FOUND.urn,
+                        parameter = Parameter(
+                            name = "apiKey",
+                            type = PARAMETER_TYPE_PAYLOAD,
+                            value = apiKey
+                        )
                     )
                 )
             }
