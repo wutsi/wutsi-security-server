@@ -32,7 +32,7 @@ class LoginService(
             logger.add("jwt_name", jwt.claims[JWTBuilder.CLAIM_NAME]?.asString())
             logger.add("jwt_sub", jwt.subject)
             logger.add("jwt_sub_type", jwt.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString())
-            logger.add("jwt_scope", jwt.claims[JWTBuilder.CLAIM_SCOPE]?.asString())
+            logger.add("jwt_scope", jwt.claims[JWTBuilder.CLAIM_SCOPE]?.asList(String::class.java))
             logger.add("jwt_admin", jwt.claims[JWTBuilder.CLAIM_ADMIN]?.asString())
             logger.add("jwt_tenant_id", jwt.claims[JWTBuilder.CLAIM_TENANT_ID]?.asString())
             logger.add("jwt_header", jwt.header)
