@@ -2,15 +2,14 @@ package com.wutsi.platform.security.endpoint
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
-import kotlin.Int
+import org.springframework.boot.test.web.server.LocalServerPort
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AuthenticateControllerTest {
+class AuthenticateControllerTest {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     @Test
-    public fun invoke() {
+    fun invoke() {
     }
 }

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
@@ -20,9 +20,9 @@ import kotlin.test.assertNotNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/CreateApplicationController.sql"])
-public class CreateApplicationControllerTest {
+class CreateApplicationControllerTest {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     @Autowired
     private lateinit var dao: ApplicationRepository
@@ -36,7 +36,7 @@ public class CreateApplicationControllerTest {
     }
 
     @Test
-    public fun `create application`() {
+    fun `create application`() {
         val request = CreateApplicationRequest(
             name = "test-app",
             title = "test-app",
@@ -67,7 +67,7 @@ public class CreateApplicationControllerTest {
     }
 
     @Test
-    public fun `create application with invalid scope will fail`() {
+    fun `create application with invalid scope will fail`() {
         val request = CreateApplicationRequest(
             name = "test-app-invalid-scope",
             title = "test-app",
@@ -91,7 +91,7 @@ public class CreateApplicationControllerTest {
     }
 
     @Test
-    public fun `create application with duplicate name will fail`() {
+    fun `create application with duplicate name will fail`() {
         val request = CreateApplicationRequest(
             name = "com.wutsi.application.test",
             title = "test-app",

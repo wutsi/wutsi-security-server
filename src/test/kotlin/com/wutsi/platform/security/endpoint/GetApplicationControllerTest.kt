@@ -7,7 +7,7 @@ import com.wutsi.platform.security.util.ErrorURN
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
@@ -16,14 +16,14 @@ import kotlin.test.assertNotNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/GetApplicationController.sql"])
-public class GetApplicationControllerTest {
+class GetApplicationControllerTest {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private val rest = RestTemplate()
 
     @Test
-    public fun `return an application`() {
+    fun `return an application`() {
         val url = "http://localhost:$port/v1/applications/1"
 
         val response = rest.getForEntity(url, GetApplicationResponse::class.java)
@@ -48,7 +48,7 @@ public class GetApplicationControllerTest {
     }
 
     @Test
-    public fun `return 404 for invalid ID`() {
+    fun `return 404 for invalid ID`() {
         val url = "http://localhost:$port/v1/applications/99999"
 
         val ex = assertThrows<HttpClientErrorException> {

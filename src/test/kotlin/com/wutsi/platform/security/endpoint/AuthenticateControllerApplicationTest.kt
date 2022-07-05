@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
 import kotlin.test.assertEquals
@@ -27,7 +27,7 @@ import kotlin.test.assertTrue
 @Sql(value = ["/db/clean.sql", "/db/AuthenticateController.sql"])
 class AuthenticateControllerApplicationTest : AbstractController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private lateinit var url: String
 
@@ -45,7 +45,7 @@ class AuthenticateControllerApplicationTest : AbstractController() {
     }
 
     @Test
-    public fun `login`() {
+    fun `login`() {
         val key = keyDao.findById(1).get()
         println("public: ${key.publicKey}")
         println("private: ${key.privateKey}")
@@ -85,7 +85,7 @@ class AuthenticateControllerApplicationTest : AbstractController() {
             LoginService.APP_TOKEN_TTL_MILLIS / 60000,
             (decoded.expiresAt.time - decoded.issuedAt.time) / 60000
         )
-        assertTrue(decoded.getClaim(JWTBuilder.CLAIM_TENANT_ID).isNull)
+        assertTrue(decoded.getClaim(JWTBuilder.CLAIM_TENANT_ID).isMissing)
     }
 
     @Test

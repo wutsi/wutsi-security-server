@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
@@ -18,9 +18,9 @@ import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/GrantScopeController.sql"])
-public class GrantScopesControllerTest {
+class GrantScopesControllerTest {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     @Autowired
     private lateinit var dao: ApplicationRepository
@@ -34,7 +34,7 @@ public class GrantScopesControllerTest {
     }
 
     @Test
-    public fun `grant scopes`() {
+    fun `grant scopes`() {
         val request = GrantScopeRequest(
             scopeNames = listOf("user-read-basic", "user-read-email", "user-read")
         )
@@ -47,7 +47,7 @@ public class GrantScopesControllerTest {
     }
 
     @Test
-    public fun `grant invalid scope`() {
+    fun `grant invalid scope`() {
         val request = GrantScopeRequest(
             scopeNames = listOf("xxx")
         )
@@ -62,7 +62,7 @@ public class GrantScopesControllerTest {
     }
 
     @Test
-    public fun `grant invalid application`() {
+    fun `grant invalid application`() {
         url = "http://localhost:$port/v1/applications/9999/scopes"
         val request = GrantScopeRequest(
             scopeNames = listOf("user-read-basic", "user-read-email", "user-read")

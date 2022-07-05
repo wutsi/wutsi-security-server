@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
@@ -16,9 +16,9 @@ import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/GetKeyController.sql"])
-public class GetKeyControllerTest {
+class GetKeyControllerTest {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private val rest = RestTemplate()
     private lateinit var url: String
@@ -29,7 +29,7 @@ public class GetKeyControllerTest {
     }
 
     @Test
-    public fun invoke() {
+    fun invoke() {
         val response = rest.getForEntity(url, GetKeyResponse::class.java)
         assertEquals(200, response.statusCodeValue)
 
@@ -39,7 +39,7 @@ public class GetKeyControllerTest {
 
     @Test
     @Sql(value = ["/db/clean.sql"])
-    public fun invokeKeyNotFound() {
+    fun invokeKeyNotFound() {
         val ex = assertThrows<HttpClientErrorException> {
             rest.getForEntity(url, ErrorResponse::class.java)
         }

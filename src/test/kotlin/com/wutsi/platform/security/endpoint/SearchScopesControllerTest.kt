@@ -5,16 +5,16 @@ import com.wutsi.platform.security.dto.SearchScopeResponse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/SearchScopesController.sql"])
-public class SearchScopesControllerTest {
+class SearchScopesControllerTest {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private val rest = RestTemplate()
     private lateinit var url: String
@@ -25,7 +25,7 @@ public class SearchScopesControllerTest {
     }
 
     @Test
-    public fun invoke() {
+    fun invoke() {
         val response = rest.getForEntity(url, SearchScopeResponse::class.java)
         assertEquals(200, response.statusCodeValue)
 
@@ -36,7 +36,13 @@ public class SearchScopesControllerTest {
         assertScopeEquals("user-read-email", "Read user email", 0, true, response.body.scopes[3])
     }
 
-    private fun assertScopeEquals(name: String, description: String, securityLevel: Int, active: Boolean, scope: Scope) {
+    private fun assertScopeEquals(
+        name: String,
+        description: String,
+        securityLevel: Int,
+        active: Boolean,
+        scope: Scope
+    ) {
         assertEquals(name, scope.name)
         assertEquals(description, scope.description)
         assertEquals(securityLevel, scope.securityLevel)

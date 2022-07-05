@@ -10,16 +10,16 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/LogoutController.sql"])
-public class LogoutControllerTest : AbstractController() {
+class LogoutControllerTest : AbstractController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private lateinit var url: String
 
@@ -34,7 +34,7 @@ public class LogoutControllerTest : AbstractController() {
     }
 
     @Test
-    public fun logout() {
+    fun logout() {
         addTracingRequestInterceptor("1111")
 
         val response = rest.getForEntity(url, Any::class.java)
@@ -45,7 +45,7 @@ public class LogoutControllerTest : AbstractController() {
     }
 
     @Test
-    public fun invalidToken() {
+    fun invalidToken() {
         addTracingRequestInterceptor("xxxxxxx")
 
         val response = rest.getForEntity(url, Any::class.java)
@@ -54,7 +54,7 @@ public class LogoutControllerTest : AbstractController() {
     }
 
     @Test
-    public fun noAccessToken() {
+    fun noAccessToken() {
         val response = rest.getForEntity(url, Any::class.java)
 
         assertEquals(200, response.statusCodeValue)

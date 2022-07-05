@@ -3,7 +3,7 @@ package com.wutsi.platform.security.endpoint
 import com.wutsi.platform.security.dto.SearchApplicationResponse
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
@@ -11,14 +11,14 @@ import kotlin.test.assertNotNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/SearchApplicationController.sql"])
-public class SearchApplicationsControllerTest {
+class SearchApplicationsControllerTest {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private val rest = RestTemplate()
 
     @Test
-    public fun `search by name`() {
+    fun `search by name`() {
         val url = "http://localhost:$port/v1/applications?name=com.wutsi.application.test&limit=2"
         val response = rest.getForEntity(url, SearchApplicationResponse::class.java)
         assertEquals(200, response.statusCodeValue)
@@ -39,7 +39,7 @@ public class SearchApplicationsControllerTest {
     }
 
     @Test
-    public fun `search all`() {
+    fun `search all`() {
         val url = "http://localhost:$port/v1/applications?limit=20"
         val response = rest.getForEntity(url, SearchApplicationResponse::class.java)
         assertEquals(200, response.statusCodeValue)

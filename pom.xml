@@ -23,12 +23,12 @@
     <jacoco.threshold.class>0.90</jacoco.threshold.class>
     <jdk.version>11</jdk.version>
 
-    <java-jwt.version>3.19.2</java-jwt.version>
+    <java-jwt.version>4.0.0</java-jwt.version>
     <javax-validation.version>2.0.1.Final</javax-validation.version>
     <junit.version>5.8.2</junit.version>
     <kotlin.version>1.7.0</kotlin.version>
     <kotlin-mockito.version>2.2.0</kotlin-mockito.version>
-    <klint.version>0.45.2</klint.version>
+    <klint.version>0.46.1</klint.version>
     <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
     <maven-jacoco-plugin.version>0.8.8</maven-jacoco-plugin.version>
     <hikari-cp.version>5.0.1</hikari-cp.version>
